@@ -31,17 +31,17 @@ datasets:
   val_0:
     name: Set5
     type: PairedImageDataset
-    dataroot_gt: datasets/Set5/HR
-    dataroot_lq: datasets/Set5/LR_bicubic/X2
-    filename_tmpl: '{}x2'
+    dataroot_gt: /home/featurize/data/TestDataSR/HR/Set5/x2
+    dataroot_lq: /home/featurize/data/TestDataSR/LR/LRBI/Set5/x2
+    filename_tmpl: '{}'
     io_backend:
       type: disk
   val_1:
     name: Set14
     type: PairedImageDataset
-    dataroot_gt: datasets/Set14/HR
-    dataroot_lq: datasets/Set14/LR_bicubic/X2
-    filename_tmpl: '{}x2'
+    dataroot_gt: /home/featurize/data/TestDataSR/HR/Set14/x2
+    dataroot_lq: /home/featurize/data/TestDataSR/LR/LRBI/Set14/x2
+    filename_tmpl: '{}'
     io_backend:
       type: disk
 
