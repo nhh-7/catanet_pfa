@@ -9,45 +9,45 @@ datasets:
   test_1:  # the 1st test dataset
     name: Set5
     type: PairedImageDataset
-    dataroot_gt: datasets/Set5/HR
-    dataroot_lq: datasets/Set5/LR_bicubic/X3
-    filename_tmpl: '{}x3'
+    dataroot_gt: datasets/TestDataSR/HR/Set5/x3
+    dataroot_lq: datasets/TestDataSR/LR/LRBI/Set5/x3
+    filename_tmpl: '{}'
     io_backend:
       type: disk
 
   test_2:  # the 2nd test dataset
     name: Set14
     type: PairedImageDataset
-    dataroot_gt: datasets/Set14/HR
-    dataroot_lq: datasets/Set14/LR_bicubic/X3
-    filename_tmpl: '{}x3'
+    dataroot_gt: datasets/TestDataSR/HR/Set14/x3
+    dataroot_lq: datasets/TestDataSR/LR/LRBI/Set14/x3
+    filename_tmpl: '{}'
     io_backend:
       type: disk
 
   test_3:  # the 3rd test dataset
     name: B100
     type: PairedImageDataset
-    dataroot_gt: datasets/B100/HR
-    dataroot_lq: datasets/B100/LR_bicubic/X3
-    filename_tmpl: '{}x3'
+    dataroot_gt: datasets/TestDataSR/HR/B100/x3
+    dataroot_lq: datasets/TestDataSR/LR/LRBI/B100/x3
+    filename_tmpl: '{}'
     io_backend:
       type: disk
 
   test_4:  # the 4th test dataset
     name: Urban100
     type: PairedImageDataset
-    dataroot_gt: datasets/Urban100/HR
-    dataroot_lq: datasets/Urban100/LR_bicubic/X3
-    filename_tmpl: '{}x3'
+    dataroot_gt: datasets/TestDataSR/HR/Urban100/x3
+    dataroot_lq: datasets/TestDataSR/LR/LRBI/Urban100/x3
+    filename_tmpl: '{}'
     io_backend:
       type: disk
 
   test_5:  # the 5th test dataset
     name: Manga109
     type: PairedImageDataset
-    dataroot_gt: datasets/Manga109/HR
-    dataroot_lq: datasets/Manga109/LR_bicubic/X3
-    filename_tmpl: '{}_LRBI_x3'
+    dataroot_gt: datasets/TestDataSR/HR/Manga109/x3
+    dataroot_lq: datasets/TestDataSR/LR/LRBI/Manga109/x3
+    filename_tmpl: '{}'
     io_backend:
       type: disk
 
