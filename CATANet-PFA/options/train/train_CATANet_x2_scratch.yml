@@ -64,6 +64,8 @@ train:
     weight_decay: 0
     betas: [0.9, 0.99]
 
+  accum_iter: 4 
+
   scheduler:
     type: MultiStepLR
     milestones: [300000, 500000, 650000, 700000, 750000]
