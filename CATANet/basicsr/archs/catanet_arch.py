@@ -78,7 +78,7 @@ class IASA(nn.Module):
         self.group_size = group_size
         
     
-    def forward(self, normed_x, idx_last, k_global, v_global):
+    def forward(self, normed_x, idx_last, k_global, v_global, sorted_belong_idx=None, prev_attn_map=None):
         x = normed_x
         B, N, _ = x.shape
        
@@ -99,7 +99,40 @@ class IASA(nn.Module):
         paded_v = torch.cat((v, torch.flip(v[:,N-pad_n-gs:N, :], dims=[-2])), dim=-2)
         paded_v = paded_v.unfold(-2,2*gs,gs)
         paded_v = rearrange(paded_v, "b ng (h d) gs -> b ng h gs d",h=self.heads)
-        out1 = F.scaled_dot_product_attention(paded_q,paded_k,paded_v)
+
+        # Step 3.2: Cluster-Isolation Mask
+        if sorted_belong_idx is not None:
+            paded_idx_q_full = torch.cat((sorted_belong_idx, torch.flip(sorted_belong_idx[:, N-pad_n:N], dims=[-1])), dim=-1)
+            paded_idx_q = rearrange(paded_idx_q_full, "b (ng gs) -> b ng gs", ng=ng, gs=gs)
+            
+            paded_idx_k_full = torch.cat((sorted_belong_idx, torch.flip(sorted_belong_idx[:, N-pad_n-gs:N], dims=[-1])), dim=-1)
+            paded_idx_k = paded_idx_k_full.unfold(-1, 2*gs, gs)
+            
+            mask = (paded_idx_q.unsqueeze(-1) == paded_idx_k.unsqueeze(-2))
+            mask = mask.unsqueeze(2) # b ng 1 gs 2*gs
+        else:
+            mask = None
+
+        # Step 3.3: Progressive Focused Attention
+        scale = paded_q.shape[-1] ** -0.5
+        attn_logits = torch.matmul(paded_q, paded_k.transpose(-2, -1)) * scale
+        
+        if mask is not None:
+            attn_logits = attn_logits.masked_fill(~mask, float('-inf'))
+            
+        attn_probs = F.softmax(attn_logits, dim=-1)
+        
+        alpha = 0.5
+        if prev_attn_map is not None and prev_attn_map.shape == attn_probs.shape:
+            fused_probs = alpha * prev_attn_map + (1 - alpha) * attn_probs
+            if mask is not None:
+                fused_probs = fused_probs.masked_fill(~mask, 0.0)
+                fused_probs = fused_probs / (fused_probs.sum(dim=-1, keepdim=True) + 1e-9)
+        else:
+            fused_probs = attn_probs
+            
+        current_attn_map = fused_probs
+        out1 = torch.matmul(fused_probs, paded_v)
         
         
         k_global = k_global.reshape(1,1,*k_global.shape).expand(B,ng,-1,-1,-1)
@@ -112,7 +145,7 @@ class IASA(nn.Module):
         out = out.scatter(dim=-2, index=idx_last.expand(out.shape), src=out)
         out = self.proj(out)
     
-        return out
+        return out, current_attn_map
     
 class IRCA(nn.Module):
     def __init__(self, dim, qk_dim, heads):
@@ -155,7 +188,7 @@ class TAB(nn.Module):
         self.conv1x1 = nn.Conv2d(dim,dim,1, bias=False)
 
     
-    def forward(self, x):
+    def forward(self, x, prev_attn_map=None):
         _,_,h, w = x.shape
         x = rearrange(x, 'b c h w->b (h w) c')
         residual = x
@@ -186,8 +219,10 @@ class TAB(nn.Module):
     
             idx = torch.argsort(x_belong_idx, dim=-1)
             idx_last = torch.gather(idx_last, dim=-1, index=idx).unsqueeze(-1)
+            
+            sorted_belong_idx = torch.gather(x_belong_idx, dim=-1, index=idx)
         
-        y = self.iasa_attn(x, idx_last,k_global,v_global)
+        y, current_attn_map = self.iasa_attn(x, idx_last, k_global, v_global, sorted_belong_idx, prev_attn_map)
         y = rearrange(y,'b (h w) c->b c h w',h=h).contiguous()
         y = self.conv1x1(y)
         x = residual + rearrange(y, 'b c h w->b (h w) c')
@@ -204,7 +239,7 @@ class TAB(nn.Module):
                     ema_inplace(self.means, new_means, self.ema_decay)
             
     
-        return rearrange(x, 'b (h w) c->b c h w',h=h)
+        return rearrange(x, 'b (h w) c->b c h w',h=h), current_attn_map
         
         
         
@@ -480,12 +515,13 @@ class CATANet(nn.Module):
             nn.init.constant_(m.weight, 1.0)
 
     def forward_features(self, x):
+        prev_attn_map = None
         for i in range(self.block_num):
             residual = x
       
             global_attn,local_attn = self.blocks[i]
             
-            x = global_attn(x)
+            x, prev_attn_map = global_attn(x, prev_attn_map)
             
             x = local_attn(x, self.patch_size[i])
             

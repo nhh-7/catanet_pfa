@@ -1,209 +1,78 @@
-# PFA-CATANet (Progressive Focused Content-Aware Token Aggregation) 详细融合与代码实现方案
+# PFA-CATANet (Progressive Focused Content-Aware Token Aggregation) 详细架构与逻辑融合方案
 
-本文档旨在提供一份**保姆级**的代码融合指南，指导开发者如何将 CVPR 2025 的 **Progressive Focused Attention (PFA)** [来自 PFT-SR] 完美嵌入到 **CATANet** 的 `IASA (Intra-Group Self-Attention)` 模块中，以解决 CATANet 强制子组切分带来的跨聚类注意力噪声问题，同时保持轻量级特性。
-
----
-
-## 1. 融合核心思想与数据流改造
-
-在原版 CATANet 中，`IASA` 模块负责在 Token 被聚类并强制切分为等长 `Subgroup`（长度为 `group_size`）后进行 Self-Attention。
-其原有的前向传播数据流为：
-`Input x -> CATA分组 -> Subgroup切分 -> F.scaled_dot_product_attention -> Output`
-
-**改造后的数据流 (PFA-IASA)**：
-我们将引入**层间注意力权重继承 (Attention Inheritance)** 和 **稀疏掩码 (Sparse Mask)** 机制：
-1. **网络级传导**：在 `CATANet` 的 `forward_features` 中，增加一个全局变量 `prev_attn_map`，在多个 `TAB` (Token-Aggregation Block) 之间传递。
-2. **掩码生成**：根据 CATA 模块输出的聚类索引 `x_belong_idx`，为每个 Subgroup 生成一个 **Cluster-Isolation Mask**（同一子组内，如果 Token A 和 Token B 不属于同一个聚类中心，则 Mask 对应位置为 `-inf`）。
-3. **稀疏聚焦 (Progressive Focusing)**：结合 `prev_attn_map` 和 `Cluster-Isolation Mask`，计算当前层的聚焦注意力矩阵。
+本文档提供将 CVPR 2025 的 **Progressive Focused Attention (PFA)** (出自 PFT 论文) 融合进 **CATANet** 算法的详细架构级步骤与逻辑设计。本方案旨在解决 CATANet 在子组（Subgroup）划分时引入的跨聚类噪声问题，同时引入渐进式注意力聚焦，以在不增加（甚至降低）计算复杂度的情况下提升超分辨率性能。
 
 ---
 
-## 2. 代码级修改指南
-
-所有修改主要集中在 `basicsr/archs/catanet_arch.py` 文件中。
-为避免直接引入复杂的 C++ 稀疏矩阵算子（这可能影响跨平台兼容性），本方案采用 **PyTorch 原生的 Masked Scaled Dot-Product Attention** 来实现轻量化的 PFA 逻辑。
-
-### 步骤 1：修改 `CATANet` 主网络的前向传播 (网络级传导)
-
-在 `catanet_arch.py` 中找到 `CATANet.forward_features` 方法，增加 `prev_attn` 的传递。
-
-**修改前：**
-```python
-    def forward_features(self, x):
-        for i in range(self.block_num):
-            residual = x
-            global_attn, local_attn = self.blocks[i]
-            x = global_attn(x)
-            x = local_attn(x, self.patch_size[i])
-            x = residual + self.mid_convs[i](x)
-        return x
-```
-
-**修改后：**
-```python
-    def forward_features(self, x):
-        prev_attn = None  # 用于传递 Progressive Focused Attention Map
-        for i in range(self.block_num):
-            residual = x
-            global_attn, local_attn = self.blocks[i]
-            
-            # 将 prev_attn 传入 TAB (global_attn)
-            x, prev_attn = global_attn(x, prev_attn)
-            
-            x = local_attn(x, self.patch_size[i])
-            x = residual + self.mid_convs[i](x)
-        return x
-```
+## 1. 核心改进思想
+1. **网络级注意力继承 (Attention Inheritance)**：让深层网络能够复用和聚焦浅层网络学到的有效注意力分布。
+2. **聚类隔离掩码 (Cluster-Isolation Mask)**：在执行子组 (Subgroup) 注意力计算时，利用真实的聚类 ID 屏蔽被强制划分到同一个子组但属于不同聚类的 Token 之间的交互。
 
 ---
 
-### 步骤 2：修改 `TAB` 模块以支持 Mask 和 Attention Map 传递
+## 2. 详细融合步骤
 
-在 `catanet_arch.py` 中找到 `TAB.forward` 方法。我们需要捕获 Token 的聚类归属，并将其传递给 `IASA` 模块，同时传递 `prev_attn`。
+### 步骤一：网络宏观层面的数据流改造（主干网络改造）
+在 CATANet 的主干特征提取部分（即连续的残差组块 Residual Groups），我们需要建立一条额外的**注意力状态传递通道**。
 
-**修改前：**
-```python
-    def forward(self, x): # ... 省略前半部分 ...
-        with torch.no_grad():
-            x_scores = torch.einsum('b i c,j c->b i j', F.normalize(x, dim=-1), F.normalize(x_means, dim=-1))
-            x_belong_idx = torch.argmax(x_scores, dim=-1)
-            idx = torch.argsort(x_belong_idx, dim=-1)
-            idx_last = torch.gather(idx_last, dim=-1, index=idx).unsqueeze(-1)
-        
-        # 调用 IASA
-        y = self.iasa_attn(x, idx_last, k_global, v_global)
-        # ...
-        return rearrange(x, 'b (h w) c->b c h w',h=h)
-```
+1. **初始化全局状态**：在开始遍历所有的 `Token-Aggregation Block (TAB)` 之前，初始化一个变量 `prev_attn_map`（初始值为 None）。
+2. **状态逐层传递**：在遍历每个 `TAB` 模块时，将 `prev_attn_map` 作为额外输入传入该模块。
+3. **状态更新**：`TAB` 模块在计算完毕后，不仅要返回更新后的特征图 (Feature Map)，还要返回当前层计算出的最新 `current_attn_map`，并将其赋值给 `prev_attn_map`，以便传递给下一层。
 
-**修改后：**
-```python
-    # 修改 forward 签名，接收 prev_attn
-    def forward(self, x, prev_attn=None):
-        # ... 省略前半部分 ...
-        with torch.no_grad():
-            x_scores = torch.einsum('b i c,j c->b i j', F.normalize(x, dim=-1), F.normalize(x_means, dim=-1))
-            x_belong_idx = torch.argmax(x_scores, dim=-1) # [B, N]
-            idx = torch.argsort(x_belong_idx, dim=-1)
-            idx_last = torch.gather(idx_last, dim=-1, index=idx).unsqueeze(-1)
-            
-            # 同样对 x_belong_idx 进行排序，以便在 IASA 中知道子组内每个 token 的真实聚类 ID
-            sorted_belong_idx = torch.gather(x_belong_idx, dim=-1, index=idx)
-        
-        # 将 sorted_belong_idx 和 prev_attn 传递给 IASA
-        y, current_attn = self.iasa_attn(x, idx_last, k_global, v_global, sorted_belong_idx, prev_attn)
-        
-        y = rearrange(y,'b (h w) c->b c h w',h=h).contiguous()
-        y = self.conv1x1(y)
-        x = residual + rearrange(y, 'b c h w->b (h w) c')
-        x = self.mlp(x, x_size=(h, w)) + x
-        # ... 
-        return rearrange(x, 'b (h w) c->b c h w',h=h), current_attn
-```
+### 步骤二：TAB 模块内部的信息提取与传递
+TAB 模块是 CATANet 聚类的核心，我们需要在这里提取每个 Token 的真实聚类归属，并传递给注意力计算模块 (IASA)。
 
----
+1. **获取聚类索引 (Cluster Assignment)**：
+   在 CATA（Content-Aware Token Aggregation）阶段，模型会计算所有 Token 与全局聚类中心 (`x_means`) 的余弦相似度。通过 `argmax` 操作，我们可以获得每个 Token 所属的聚类中心 ID，记为 `x_belong_idx` (形状为 `[Batch, N]`)。
+2. **聚类索引排序对齐**：
+   CATANet 会根据聚类 ID 对所有的 Token 进行排序 (Argsort)，以便将属于同一聚类的 Token 物理上移动到相邻的位置。此时，**必须对 `x_belong_idx` 进行完全相同的排序操作**，得到 `sorted_belong_idx`。
+   *关键点*：经过排序后，特征序列 `x` 和聚类标签 `sorted_belong_idx` 在序列维度上是一一对应的。
+3. **接口扩展**：
+   将 `sorted_belong_idx` 和上层传来的 `prev_attn_map` 一起传递给内部的 IASA (Intra-Group Self-Attention) 模块。
 
-### 步骤 3：重写 `IASA` (Intra-Group Self-Attention) 实现 PFA
+### 步骤三：IASA 模块内部的 PFA 逻辑实现（核心）
+这是融合最核心的区域。我们需要在计算注意力矩阵（Attention Logits）时，引入 PFA 聚焦机制和聚类隔离机制。
 
-这是最核心的修改。我们需要在 `IASA` 中引入基于聚类 ID 的 `Cluster-Isolation Mask` 和来自前一层的 `prev_attn` 融合。
+#### 3.1 序列切分与 Padding 对齐 (数据对齐关键点)
+由于图像总 Token 数 `N` 可能无法被 `group_size` (`gs`) 整除，且 CATANet 为了扩大感受野，允许 Query 访问相邻的 Key/Value。这里存在严格的数据对齐要求：
+1. **Query 的对齐**：
+   - 如果 `N` 无法被 `gs` 整除，需要对末尾的 Token 进行 Padding（通常采用翻转 Padding）。
+   - 将 Padding 后的 Query 序列 Reshape 为 `[Batch, 组数(ng), Head数, gs, Dim]`。
+2. **Key / Value 的对齐（重叠窗口）**：
+   - 因为当前子组的 Query 要访问当前子组和**下一个子组**的 Key，所以 Key 的有效长度是 `2 * gs`。
+   - 对 Key 进行 Padding 时，需要比 Query 多 Pad 一个 `gs` 的长度。
+   - 使用滑动窗口操作 (Unfold) 将 Key 划分为重叠的块，Reshape 后，每个子组对应的 Key 长度为 `2 * gs`。
 
-在 `catanet_arch.py` 中重写 `IASA.forward`：
+#### 3.2 Cluster-Isolation Mask 的生成与对齐
+为了防止强制子组划分带来的跨聚类噪声，必须为 Attention Matrix 生成一个布尔掩码：
+1. **Query 标签的 Padding 与 Reshape**：
+   对 `sorted_belong_idx` 进行与 Query 完全相同的 Padding 和 Reshape，得到 `paded_idx_q` (形状对应于 `gs`)。
+2. **Key 标签的 Padding 与 Unfold**：
+   对 `sorted_belong_idx` 进行与 Key 完全相同的 Padding (多 Pad 一个 `gs`) 和 Unfold 操作，得到 `paded_idx_k` (形状对应于 `2 * gs`)。
+3. **生成 Mask**：
+   比较 `paded_idx_q` 和 `paded_idx_k`。当 Query Token 和 Key Token 的聚类 ID 严格相等时，掩码对应位置为 `True`，否则为 `False`。最终生成的 Mask 形状必须与注意力矩阵 `[Batch, ng, gs, 2*gs]` 严格对齐（可能需要广播 Head 维度）。
 
-```python
-class IASA(nn.Module):
-    def __init__(self, dim, qk_dim, heads, group_size):
-        # ... 保持不变 ...
-        self.focus_ratio = 0.5 # PFA 的焦点衰减率，可调超参
+#### 3.3 渐进式聚焦注意力 (Progressive Focused Attention) 的计算
+在获得 Q、K、V 和 Mask 后，执行 PFA 逻辑：
+1. **计算初始 Logits**：计算 Q 和 K 的点积缩放结果，得到 `attn_logits`。
+2. **应用隔离掩码**：利用上一步生成的 Mask，将 `attn_logits` 中掩码为 `False`（不同聚类）的位置强行替换为负无穷 (`-inf`)。
+3. **计算 Softmax**：对 `attn_logits` 执行 Softmax，此时不同聚类的 Token 之间的注意力权重将严格为 0。
+4. **融合前层 Attention (PFA 核心公式)**：
+   - 如果传入了 `prev_attn_map`，则根据 PFT 的公式进行加权融合：`fused_probs = α * prev_attn_map + (1 - α) * 当前_Softmax_probs`。（$\alpha$ 为 Focus Ratio 超参数，建议设为 0.5 左右）。
+   - **注意对齐与重归一化**：由于加权后概率和可能发生轻微偏移，且我们需要确保跨聚类位置依然为 0，需再次使用 Mask 将无关位置置 0，并在最后对概率分布进行重归一化（除以总和）。
+5. **计算最终特征并保存状态**：
+   - 将 `fused_probs` 与 Value 矩阵相乘，得到子组内的注意力输出特征。
+   - 将当前的 `fused_probs` 作为 `current_attn_map` 从模块中返回，供下一层网络继承。
 
-    def forward(self, normed_x, idx_last, k_global, v_global, sorted_belong_idx, prev_attn=None):
-        x = normed_x
-        B, N, _ = x.shape
-       
-        q, k, v = self.to_q(x), self.to_k(x), self.to_v(x)
-        q = torch.gather(q, dim=-2, index=idx_last.expand(q.shape))
-        k = torch.gather(k, dim=-2, index=idx_last.expand(k.shape))
-        v = torch.gather(v, dim=-2, index=idx_last.expand(v.shape))
-   
-        gs = min(N, self.group_size)  # group size
-        ng = (N + gs - 1) // gs
-        pad_n = ng * gs - N
-        
-        # --- 1. 数据对齐与 Pad ---
-        paded_q = torch.cat((q, torch.flip(q[:,N-pad_n:N, :], dims=[-2])), dim=-2)
-        paded_q = rearrange(paded_q, "b (ng gs) (h d) -> b ng h gs d", ng=ng, h=self.heads)
-        
-        paded_k = torch.cat((k, torch.flip(k[:,N-pad_n-gs:N, :], dims=[-2])), dim=-2)
-        paded_k = paded_k.unfold(-2, 2*gs, gs)
-        paded_k = rearrange(paded_k, "b ng (h d) gs -> b ng h gs d", h=self.heads)
-        
-        paded_v = torch.cat((v, torch.flip(v[:,N-pad_n-gs:N, :], dims=[-2])), dim=-2)
-        paded_v = paded_v.unfold(-2, 2*gs, gs)
-        paded_v = rearrange(paded_v, "b ng (h d) gs -> b ng h gs d", h=self.heads)
-
-        # --- 2. 构建 Cluster-Isolation Mask (解决跨聚类噪声) ---
-        # 扩展 sorted_belong_idx 以匹配 pad_n
-        paded_idx = torch.cat((sorted_belong_idx, torch.flip(sorted_belong_idx[:, N-pad_n:N], dims=[-1])), dim=-1)
-        paded_idx_q = rearrange(paded_idx, "b (ng gs) -> b ng gs 1", ng=ng)
-        
-        # Key 的索引跨越相邻窗口 (2*gs)
-        paded_idx_k = torch.cat((sorted_belong_idx, torch.flip(sorted_belong_idx[:, N-pad_n-gs:N], dims=[-1])), dim=-1)
-        paded_idx_k = paded_idx_k.unfold(-1, 2*gs, gs)
-        paded_idx_k = rearrange(paded_idx_k, "b ng gs -> b ng 1 gs")
-        
-        # 生成布尔掩码：只有 Query 和 Key 属于同一个聚类中心时才计算注意力
-        # cluster_mask 形状: [B, ng, gs, 2*gs]
-        cluster_mask = (paded_idx_q == paded_idx_k).unsqueeze(2) # 增加 heads 维度 [B, ng, 1, gs, 2*gs]
-        
-        # --- 3. 计算注意力权重 (Progressive Focused Attention) ---
-        scale = q.shape[-1] ** -0.5
-        # [B, ng, h, gs, 2*gs]
-        attn_logits = torch.einsum('b n h i d, b n h j d -> b n h i j', paded_q, paded_k) * scale
-        
-        # 应用 Cluster Mask：将不同聚类的位置置为极小值
-        attn_logits = attn_logits.masked_fill(~cluster_mask, float('-inf'))
-        
-        # 融合前一层的 Attention Map (PFA 核心逻辑)
-        if prev_attn is not None:
-            # PFT 论文公式：A_l = Softmax(Q K^T) * (alpha * A_{l-1} + (1-alpha) * I)
-            # 为了简便实现且不破坏梯度，我们在 logit 层进行渐进聚焦引导
-            # 避免直接乘法带来的分布破坏，利用 prev_attn 引导当前的注意力分布
-            attn_probs = F.softmax(attn_logits, dim=-1)
-            fused_probs = self.focus_ratio * prev_attn + (1 - self.focus_ratio) * attn_probs
-            # 重新进行归一化并屏蔽非同类 token
-            fused_probs = fused_probs.masked_fill(~cluster_mask, 0.0)
-            fused_probs = fused_probs / (fused_probs.sum(dim=-1, keepdim=True) + 1e-9)
-        else:
-            fused_probs = F.softmax(attn_logits, dim=-1)
-
-        # --- 4. 注意力输出聚合 ---
-        out1 = torch.einsum('b n h i j, b n h j d -> b n h i d', fused_probs, paded_v)
-        current_attn = fused_probs.detach() # 保存当前 Attention Map 给下一层
-        
-        # 全局注意力分支保持不变
-        k_global = k_global.reshape(1,1,*k_global.shape).expand(B,ng,-1,-1,-1)
-        v_global = v_global.reshape(1,1,*v_global.shape).expand(B,ng,-1,-1,-1)
-        out2 = F.scaled_dot_product_attention(paded_q, k_global, v_global)
-        
-        out = out1 + out2
-        out = rearrange(out, "b ng h gs d -> b (ng gs) (h d)")[:, :N, :]
- 
-        out = out.scatter(dim=-2, index=idx_last.expand(out.shape), src=out)
-        out = self.proj(out)
-    
-        return out, current_attn
-```
+### 步骤四：与全局注意力 (IRCA) 分支的合并
+CATANet 的 IASA 模块中除了计算上述的子组内部注意力外，还会让 Query 与全局聚类中心 (Global K/V) 计算一次全局交叉注意力。
+这一部分**保持原样不变**。
+最终，将 PFA 增强后的子组注意力输出与全局交叉注意力输出相加，再还原回原始的图像 Token 顺序，即可完成本层特征的提取。
 
 ---
 
-## 3. 方案总结与优势
-
-通过上述修改，我们实现了两点核心突破：
-
-1. **彻底消除 `Subgrouping` 的副作用 (Cluster-Isolation Mask)**：
-   原版 CATANet 中为了计算效率，强制把不同大小的聚类拼接成长度为 128 的块。我们在计算 Attention 时，动态比对每个 Token 真实的 `x_belong_idx`（聚类 ID），通过 Mask 强行切断了不同聚类 Token 之间的交互。这完全消除了因强制拼接带来的特征污染。
-
-2. **渐进式注意力聚焦 (PFA)**：
-   通过在 `forward_features` 中串联传递 `current_attn`，深层网络可以继承浅层网络已经学到的强相关特征分布，使得网络越深，注意力越聚焦在核心纹理上，极大提升了图像重建的锐度（PSNR/SSIM 提升来源）。
-
-3. **保持极致轻量**：
-   本方案使用原生的 `torch.einsum` 和 `masked_fill` 实现，没有引入沉重的额外网络参数，也没有引入复杂的自定义 CUDA 算子编译负担，可以直接在原生 PyTorch 下以极高的效率（利用 GPU 广播机制）运行，完美契合 CATANet “Lightweight” 的设计初衷。
+## 3. 方案总结
+通过上述架构级重构：
+1. **数据流层面**增加了 `prev_attn_map` 的自顶向下传递，实现了 PFT 论文中的 Progressive Focus 机制，引导深层网络聚焦关键纹理。
+2. **逻辑层面**巧妙利用 CATA 模块已经计算出的聚类 ID，构建了 `Cluster-Isolation Mask`，在特征空间上彻底“物理隔离”了不相关的 Token，修复了 CATANet 强制子组切分带来的理论缺陷。
+3. 整个融合过程无需引入新的可学习参数（除了一个固定的标量超参 $\alpha$），完全符合 CATANet 轻量级超分的定位。

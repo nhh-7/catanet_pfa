@@ -11,6 +11,7 @@
 通过在网络上检索 CVPR 2025 在图像超分辨率（Image Super-Resolution）与 Transformer 领域的最新研究，我们发现了另一篇极具启发性的工作：
 **《Progressive Focused Transformer for Single Image Super-Resolution》(PFT)**
 - **作者/机构**: Wei Long, Xingyu Zhou, Leheng Zhang, Shuhang Gu (CVL-UESTC)
+- **代码仓库**: https://github.com/CVL-UESTC/PFT-SR.git
 - **核心思想**: PFT 提出了 **Progressive Focused Attention (PFA)** 机制。它发现标准的 Self-Attention 计算了太多与 Query 无关的特征相似度，这不仅退化了重建性能，还带来了极大的计算开销。PFA 通过在网络深层逐步“继承”并“聚焦”前一层的注意力权重，使用**稀疏矩阵乘法 (Sparse Matrix Multiplication, SMM)** 动态过滤掉不相关的特征，只对最重要的 Token 进行注意力计算。
 
 ## 3. 融合方案：PFA-CATANet (Progressive Focused Content-Aware Token Aggregation)
