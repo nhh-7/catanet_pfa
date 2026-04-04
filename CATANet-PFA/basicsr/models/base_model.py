@@ -1,5 +1,6 @@
 import os
 import time
+import math
 import torch
 from collections import OrderedDict
 from copy import deepcopy
@@ -122,13 +123,24 @@ class BaseModel():
     def setup_schedulers(self):
         """Set up schedulers."""
         train_opt = self.opt['train']
-        scheduler_type = train_opt['scheduler'].pop('type')
+        scheduler_opt = deepcopy(train_opt['scheduler'])
+        scheduler_type = scheduler_opt.pop('type')
+        accum_iter = max(1, train_opt.get('accum_iter', 1))
+
+        if accum_iter > 1:
+            if 'milestones' in scheduler_opt:
+                scheduler_opt['milestones'] = [max(1, math.ceil(v / accum_iter)) for v in scheduler_opt['milestones']]
+            if 'restarts' in scheduler_opt:
+                scheduler_opt['restarts'] = tuple(max(0, math.ceil(v / accum_iter)) for v in scheduler_opt['restarts'])
+            if 'periods' in scheduler_opt:
+                scheduler_opt['periods'] = [max(1, math.ceil(v / accum_iter)) for v in scheduler_opt['periods']]
+
         if scheduler_type in ['MultiStepLR', 'MultiStepRestartLR']:
             for optimizer in self.optimizers:
-                self.schedulers.append(lr_scheduler.MultiStepRestartLR(optimizer, **train_opt['scheduler']))
+                self.schedulers.append(lr_scheduler.MultiStepRestartLR(optimizer, **scheduler_opt))
         elif scheduler_type == 'CosineAnnealingRestartLR':
             for optimizer in self.optimizers:
-                self.schedulers.append(lr_scheduler.CosineAnnealingRestartLR(optimizer, **train_opt['scheduler']))
+                self.schedulers.append(lr_scheduler.CosineAnnealingRestartLR(optimizer, **scheduler_opt))
         else:
             raise NotImplementedError(f'Scheduler {scheduler_type} is not implemented yet.')
 

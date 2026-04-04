@@ -169,6 +169,10 @@ def train_pipeline(root_path):
     logger.info(f'Start training from epoch: {start_epoch}, iter: {current_iter}')
     data_timer, iter_timer = AvgTimer(), AvgTimer()
     start_time = time.time()
+    accum_iter = max(1, opt['train'].get('accum_iter', 1))
+    warmup_iter = opt['train'].get('warmup_iter', -1)
+    warmup_step = math.ceil(warmup_iter / accum_iter) if warmup_iter > 0 else warmup_iter
+    optimizer_step = current_iter // accum_iter
 
     for epoch in range(start_epoch, total_epochs + 1):
         train_sampler.set_epoch(epoch)
@@ -181,11 +185,14 @@ def train_pipeline(root_path):
             current_iter += 1
             if current_iter > total_iters:
                 break
-            # update learning rate
-            model.update_learning_rate(current_iter, warmup_iter=opt['train'].get('warmup_iter', -1))
             # training
             model.feed_data(train_data)
-            model.optimize_parameters(current_iter)
+            should_step = ((current_iter % accum_iter == 0) or (current_iter == total_iters))
+            if should_step:
+                model.update_learning_rate(optimizer_step + 1, warmup_iter=warmup_step)
+            did_step = model.optimize_parameters(current_iter)
+            if did_step:
+                optimizer_step += 1
             iter_timer.record()
             if current_iter == 1:
                 # reset start time in msg_logger for more accurate eta_time
@@ -193,7 +200,7 @@ def train_pipeline(root_path):
                 msg_logger.reset_start_time()
             # log
             if current_iter % opt['logger']['print_freq'] == 0:
-                log_vars = {'epoch': epoch, 'iter': current_iter}
+                log_vars = {'epoch': epoch, 'iter': current_iter, 'optimizer_step': optimizer_step}
                 log_vars.update({'lrs': model.get_current_learning_rate()})
                 log_vars.update({'time': iter_timer.get_avg_time(), 'data_time': data_timer.get_avg_time()})
                 log_vars.update(model.get_current_log())

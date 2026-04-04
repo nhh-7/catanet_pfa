@@ -128,6 +128,8 @@ class CATANetModel(BaseModel):
         if should_step and self.ema_decay > 0:
             self.model_ema(decay=self.ema_decay)
 
+        return should_step
+
     def test(self):
         if hasattr(self, 'net_g_ema'):
             self.net_g_ema.eval()

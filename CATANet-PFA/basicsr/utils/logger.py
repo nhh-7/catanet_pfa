@@ -84,9 +84,13 @@ class MessageLogger():
         # epoch, iter, learning rates
         epoch = log_vars.pop('epoch')
         current_iter = log_vars.pop('iter')
+        optimizer_step = log_vars.pop('optimizer_step', None)
         lrs = log_vars.pop('lrs')
 
-        message = (f'[{self.exp_name[:5]}..][epoch:{epoch:3d}, iter:{current_iter:8,d}, lr:(')
+        message = (f'[{self.exp_name[:5]}..][epoch:{epoch:3d}, iter:{current_iter:8,d}')
+        if optimizer_step is not None:
+            message += f', step:{optimizer_step:8,d}'
+        message += ', lr:('
         for v in lrs:
             message += f'{v:.3e},'
         message += ')] '
