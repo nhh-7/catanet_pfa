@@ -35,6 +35,8 @@ class CATANetModel(BaseModel):
     def init_training_settings(self):
         self.net_g.train()
         train_opt = self.opt['train']
+        self.accum_iter = max(1, train_opt.get('accum_iter', 1))
+        self.total_iters = train_opt.get('total_iter')
 
         self.ema_decay = train_opt.get('ema_decay', 0)
         if self.ema_decay > 0:
@@ -69,6 +71,7 @@ class CATANetModel(BaseModel):
         # set up optimizers and schedulers
         self.setup_optimizers()
         self.setup_schedulers()
+        self.optimizer_g.zero_grad()
 
     def setup_optimizers(self):
         train_opt = self.opt['train']
@@ -90,7 +93,6 @@ class CATANetModel(BaseModel):
             self.gt = data['gt'].to(self.device)
 
     def optimize_parameters(self, current_iter):
-        self.optimizer_g.zero_grad()
         self.output = self.net_g(self.lq)
 
         l_total = 0
@@ -110,12 +112,20 @@ class CATANetModel(BaseModel):
                 l_total += l_style
                 loss_dict['l_style'] = l_style
 
-        l_total.backward()
-        self.optimizer_g.step()
+        loss_for_backward = l_total / self.accum_iter
+        loss_for_backward.backward()
+
+        should_step = (current_iter % self.accum_iter == 0)
+        if self.total_iters is not None:
+            should_step = should_step or (current_iter == self.total_iters)
+
+        if should_step:
+            self.optimizer_g.step()
+            self.optimizer_g.zero_grad()
 
         self.log_dict = self.reduce_loss_dict(loss_dict)
 
-        if self.ema_decay > 0:
+        if should_step and self.ema_decay > 0:
             self.model_ema(decay=self.ema_decay)
 
     def test(self):
