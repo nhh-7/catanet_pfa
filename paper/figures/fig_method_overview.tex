@@ -1,0 +1,19 @@
+\small
+\setlength{\fboxsep}{6pt}
+\fbox{
+\parbox{0.96\linewidth}{
+\centering
+\textbf{Outer backbone}\par
+LR image \(\rightarrow\) shallow feature conv \(\rightarrow\) stacked \moduleName{}s \(\rightarrow\) reconstruction head \(\rightarrow\) SR image
+
+\vspace{0.5em}
+\textbf{Inside \moduleName{}}\par
+LayerNorm \(\rightarrow\) \dpr{} (prototype generation + routing) \(\rightarrow\) branch split (HF/MF/LF)\par
+\(\rightarrow\) \pfsa{} with level-wise inherited attention \(\rightarrow\) \lmr{} gated injection \(\rightarrow\) selective \irca{} \(\rightarrow\) Conv\(1\times1\) + FFN
+
+\vspace{0.5em}
+\textbf{Cross-level guidance and state passing}\par
+\(A_{t-1}^{lf}, A_{t-1}^{mf}, A_{t-1}^{hf}\) \(\rightarrow\) branch-wise inheritance \(\rightarrow\) \(A_t^{lf}, A_t^{mf}, A_t^{hf}\)\par
+LF branch \(\xrightarrow{\gamma_1}\) MF branch \(\xrightarrow{\gamma_2}\) HF branch
+}
+}

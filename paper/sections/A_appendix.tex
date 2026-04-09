@@ -1,0 +1,132 @@
+\section{Additional Results and Implementation Details}
+\label{sec:appendix-full-results}
+
+\subsection{Full quantitative comparison}
+Tables~\ref{tab:main-x2} and~\ref{tab:main-x3} report the complete \(\times2\) and \(\times3\) benchmark results used in this project. They are omitted from the main body for space, but show the same ranking pattern as the \(\times4\) setting.
+
+\begin{table*}[t]
+\centering
+\caption{Full quantitative comparison under \(\times2\) SR.}
+\label{tab:main-x2}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lcccccc}
+\toprule
+Method & Params & Set5 & Set14 & BSD100 & Urban100 & Manga109 \\
+\midrule
+CARN & 1592K & 37.76 / 0.9590 & 33.52 / 0.9166 & 32.09 / 0.8978 & 31.92 / 0.9256 & 38.36 / 0.9765 \\
+IMDN & 694K & 38.00 / 0.9605 & 33.63 / 0.9177 & 32.19 / 0.8996 & 32.17 / 0.9283 & 38.88 / 0.9774 \\
+RFDN & 530K & 38.05 / 0.9606 & 33.68 / 0.9184 & 32.16 / 0.8994 & 32.12 / 0.9278 & 38.88 / 0.9773 \\
+AWSRAN-M & 1063K & 38.04 / 0.9605 & 33.66 / 0.9181 & 32.21 / 0.9000 & 32.23 / 0.9294 & 38.66 / 0.9772 \\
+OSFFNet & 516K & 38.11 / 0.9610 & 33.72 / 0.9190 & 32.29 / 0.9012 & 32.67 / 0.9331 & 39.09 / 0.9780 \\
+ESRT & 677K & 38.03 / 0.9600 & 33.75 / 0.9184 & 32.25 / 0.9001 & 32.58 / 0.9318 & 39.12 / 0.9774 \\
+ELAN-light & 582K & 38.17 / 0.9611 & 33.94 / 0.9207 & 32.30 / 0.9012 & 32.76 / 0.9340 & 39.11 / 0.9782 \\
+SwinIR-light & 878K & 38.14 / 0.9611 & 33.86 / 0.9206 & 32.31 / 0.9012 & 32.76 / 0.9340 & 39.12 / 0.9783 \\
+OmniSR & 772K & 38.22 / 0.9613 & 33.98 / 0.9210 & 32.36 / 0.9020 & 33.05 / 0.9363 & 39.28 / 0.9784 \\
+IPG-Tiny & 872K & 38.27 / 0.9616 & \textbf{34.24 / 0.9236} & 32.35 / 0.9018 & 33.04 / 0.9359 & 39.31 / 0.9786 \\
+ATD-light & 753K & 38.28 / 0.9616 & 34.11 / 0.9217 & 32.39 / 0.9023 & 33.27 / 0.9376 & 39.51 / 0.9789 \\
+\baseline{} & 477K & 38.28 / 0.9617 & 33.99 / 0.9217 & 32.37 / 0.9023 & 33.09 / 0.9372 & 39.37 / 0.9784 \\
+PFT-light & 776K & \textbf{38.36 / 0.9620} & 34.19 / 0.9232 & \textbf{32.43 / 0.9030} & 33.67 / 0.9411 & 39.55 / 0.9792 \\
+\textbf{\method{} (Ours)} & 509K & 38.33 / 0.9619 & 34.12 / 0.9228 & 32.41 / 0.9029 & \textbf{33.71 / 0.9417} & \textbf{39.58 / 0.9793} \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+\begin{table*}[t]
+\centering
+\caption{Full quantitative comparison under \(\times3\) SR.}
+\label{tab:main-x3}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lcccccc}
+\toprule
+Method & Params & Set5 & Set14 & BSD100 & Urban100 & Manga109 \\
+\midrule
+CARN & 1592K & 34.29 / 0.9255 & 30.29 / 0.8407 & 29.06 / 0.8034 & 28.06 / 0.8493 & 33.43 / 0.9427 \\
+IMDN & 703K & 34.36 / 0.9270 & 30.32 / 0.8417 & 29.09 / 0.8046 & 28.17 / 0.8519 & 33.61 / 0.9445 \\
+RFDN & 540K & 34.41 / 0.9273 & 30.34 / 0.8420 & 29.09 / 0.8050 & 28.21 / 0.8525 & 33.67 / 0.9449 \\
+OSFFNet & 524K & 34.58 / 0.9287 & 30.48 / 0.8450 & 29.21 / 0.8080 & 28.49 / 0.8595 & 34.00 / 0.9472 \\
+ESRT & 770K & 34.42 / 0.9268 & 30.43 / 0.8433 & 29.15 / 0.8063 & 28.46 / 0.8574 & 33.95 / 0.9455 \\
+ELAN-light & 590K & 34.64 / 0.9288 & 30.55 / 0.8463 & 29.21 / 0.8081 & 28.69 / 0.8624 & 34.00 / 0.9478 \\
+SwinIR-light & 886K & 34.62 / 0.9289 & 30.54 / 0.8463 & 29.20 / 0.8082 & 28.66 / 0.8624 & 33.98 / 0.9478 \\
+SPIN & 569K & 34.65 / 0.9293 & 30.57 / 0.8464 & 29.23 / 0.8089 & 28.71 / 0.8627 & 34.24 / 0.9489 \\
+OmniSR & 780K & 34.70 / 0.9294 & 30.57 / 0.8469 & 29.28 / 0.8094 & 28.84 / 0.8656 & 34.22 / 0.9487 \\
+IPG-Tiny & 878K & 34.64 / 0.9292 & 30.61 / 0.8470 & 29.26 / 0.8097 & 28.93 / 0.8666 & 34.30 / 0.9493 \\
+ATD-light & 760K & 34.70 / 0.9300 & 30.68 / 0.8485 & 29.32 / 0.8109 & 29.16 / 0.8710 & 34.60 / 0.9505 \\
+\baseline{} & 550K & 34.75 / 0.9300 & 30.67 / 0.8481 & 29.28 / 0.8101 & 29.04 / 0.8689 & 34.40 / 0.9499 \\
+PFT-light & 783K & \textbf{34.81 / 0.9305} & \textbf{30.75 / 0.8493} & \textbf{29.33 / 0.8116} & 29.43 / 0.8759 & 34.60 / 0.9510 \\
+\textbf{\method{} (Ours)} & 582K & 34.78 / 0.9303 & 30.73 / 0.8490 & 29.32 / 0.8113 & \textbf{29.46 / 0.8765} & \textbf{34.63 / 0.9511} \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+\subsection{Additional ablation studies}
+\begin{table}[t]
+\centering
+\caption{Effect of head split strategy under \(\times4\).}
+\label{tab:head-split}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{lcccc}
+\toprule
+Head split & Params & FLOPs & Urban100 & Manga109 \\
+\midrule
+\([4,0,0]\) & 563K & 46.7G & 27.04 & 31.38 \\
+\([3,1,0]\) & 565K & 46.4G & 27.15 & 31.48 \\
+\textbf{\([2,1,1]\)} & 567K & 46.1G & \textbf{27.24} & \textbf{31.55} \\
+\([1,1,2]\) & 567K & 45.9G & 27.09 & 31.42 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Effect of attention inheritance strategy under \(\times4\).}
+\label{tab:inheritance}
+\begin{tabular}{lccc}
+\toprule
+Strategy & Set5 & Urban100 & Manga109 \\
+\midrule
+No inheritance & 32.59 & 27.05 & 31.40 \\
+Single shared map & 32.60 & 27.15 & 31.49 \\
+\textbf{Level-wise state} & \textbf{32.61} & \textbf{27.24} & \textbf{31.55} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Effect of global branch placement under \(\times4\).}
+\label{tab:irca-placement}
+\begin{tabular}{lccc}
+\toprule
+IRCA placement & Set5 & Urban100 & Manga109 \\
+\midrule
+High only & 32.60 & 27.14 & 31.47 \\
+\textbf{High + Mid} & \textbf{32.61} & \textbf{27.24} & \textbf{31.55} \\
+High + Mid + Low & 32.60 & 27.17 & 31.49 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Training reference points}
+For reproducibility, Table~\ref{tab:milestones} records several training milestones used during project-side convergence monitoring. These are not formal benchmark results, but they are useful for checking whether a new run follows a healthy optimization trajectory.
+
+\begin{table}[t]
+\centering
+\caption{Training milestones for the default \method{} configuration.}
+\label{tab:milestones}
+\begin{tabular}{lcc}
+\toprule
+Iteration & Set5 & Set14 \\
+\midrule
+2.5K & 35.52 & 31.70 \\
+5K & 36.72 & 32.45 \\
+10K & 37.29 & 32.88 \\
+25K (normal) & 37.65--37.95 & 33.15--33.45 \\
+50K (normal) & 37.95--38.20 & 33.35--33.65 \\
+100K (normal) & 38.20--38.38 & 33.65--33.90 \\
+Final target & 38.36--38.45 & 34.10--34.20 \\
+\bottomrule
+\end{tabular}
+\end{table}

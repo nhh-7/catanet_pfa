@@ -1,0 +1,6 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We presented \method{}, a lightweight image super-resolution network built around content-aware progressive attention. The proposed \moduleName{} combines image-adaptive routing, progressive focused sparse interaction, and low-to-high multi-level reconstruction in one coherent design. Experiments on five standard benchmarks show that this formulation is especially effective on structure-rich datasets such as Urban100 and Manga109, while preserving the lightweight character of the model.
+
+Two limitations remain. First, the gains are largest on scenes with strong repeated structure, which means the method still benefits most when long-range self-similarity is easy to exploit after routing. Second, the current implementation still relies on fixed subgroup ordering and length rather than a truly irregular sparse kernel. Future work can therefore explore variable-length grouped attention, stronger image-adaptive prototype generation, and richer qualitative analysis of level-wise attention behavior on out-of-distribution textures.

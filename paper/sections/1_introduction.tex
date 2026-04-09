@@ -1,0 +1,30 @@
+\section{Introduction}
+
+Single image super-resolution (SISR) aims to reconstruct high-resolution details from a low-resolution observation and remains important for mobile photography, remote sensing, medical imaging, and bandwidth-limited transmission. Transformer-based SR inherits strong long-range modeling ability from self-attention~\cite{vaswani2017attention}, but this advantage is difficult to preserve in lightweight settings because unrestricted token interaction quickly exceeds practical parameter, FLOP, and latency budgets.
+
+Two observations motivate this work. First, lightweight SR still depends heavily on non-local self-similarity: repeated windows, building facades, text strokes, and manga patterns often recur across distant regions. Second, once such tokens are gathered, not every connection deserves equal computation. Dense subgroup attention spends capacity on noisy or weak correspondences, while purely local processing misses exactly the long-range evidence that helps restore structured details.
+
+Recent progress addresses these issues from complementary directions. \baseline{}~\cite{liu2025catanet} uses content-aware token aggregation to bring semantically similar tokens together efficiently, which substantially improves long-range candidate selection. However, its grouped interaction remains largely single-scale and dense inside each subgroup, making it vulnerable to subgroup impurity and limiting coarse-to-fine coordination. \pft{}~\cite{long2025pft} improves attention selectivity through progressive focused interaction, but it is not built around content-aware grouping and therefore does not directly address how grouped tokens should be routed, sparsified, and allocated across restoration scales.
+
+We address these gaps with \method{}, a lightweight SR architecture built around a new \moduleName{}. The proposed block combines a Dynamic Prototype Router (\dpr{}) for image-adaptive content organization, Progressive Focused Sparse Attention (\pfsa{}) for subgroup-dependent sparse interaction, and Low-to-High Multi-Level Reconstruction (\lmr{}) for coarse-to-fine feature restoration. Instead of treating the grouped sequence as a homogeneous token space, \method{} explicitly decomposes it into low-, mid-, and high-frequency branches. A dynamic focus rule decides how many connections each branch should retain, level-wise attention inheritance preserves useful relational priors across depth, and gated low-to-high injection lets structural cues guide the final recovery of edges and textures.
+
+This design answers three questions jointly: which tokens should be grouped together, which connections should survive within each subgroup, and at what scale those connections should be exploited. The result is a stronger non-local restoration pipeline that keeps the outer backbone lightweight while devoting most computation to high-value interactions.
+
+\begin{figure}[t]
+\centering
+\input{figures/fig_intro_pareto}
+\caption{Performance-efficiency preview on Urban100 \(\times4\). \method{} improves over \baseline{} on the most structure-sensitive benchmark while remaining much smaller and faster than larger lightweight transformers such as PFT-light and SwinIR-light.}
+\label{fig:intro-pareto}
+\end{figure}
+
+Figure~\ref{fig:intro-pareto} previews the central outcome of this paper. The proposed model does not seek gains by increasing width or depth; instead, it improves how grouped tokens are routed and reused after content-aware aggregation. This is precisely why the strongest gains appear on Urban100 and Manga109: once similar tokens are brought together, a scale-aware focused interaction pattern is more useful than a single dense operator.
+
+Our contributions are summarized as follows:
+\begin{enumerate}[leftmargin=1.2em]
+    \item We propose \method{}, a lightweight image SR model that integrates content-aware routing, progressive focused sparse attention, and multi-level reconstruction for coarse-to-fine non-local restoration.
+    \item We introduce the \moduleName{}, which unifies \dpr{}, \pfsa{}, level-wise attention inheritance, and gated low-to-high injection in one lightweight interaction block.
+    \item We show that selective global interaction is sufficient: attaching the global branch only to the mid- and high-frequency levels yields the best efficiency-performance balance.
+    \item Extensive experiments demonstrate that \method{} is especially effective on complex-structure benchmarks. Under \(\times4\), it improves over \baseline{} by \(+0.37\) dB on Urban100 and \(+0.24\) dB on Manga109 while reducing FLOPs from 46.8G to 46.1G and latency from 86.0 ms to 85.1 ms.
+\end{enumerate}
+
+The remainder of the paper is organized as follows. Section~\ref{sec:related} discusses related work. Section~\ref{sec:method} introduces the proposed architecture and the \moduleName{}. Section~\ref{sec:experiments} reports quantitative comparisons, complexity analysis, and ablations. Section~\ref{sec:conclusion} concludes the paper and discusses limitations.

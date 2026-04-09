@@ -1,0 +1,120 @@
+\section{Experiments}
+\label{sec:experiments}
+
+\subsection{Experimental setup}
+All results in this paper follow the experimental protocol recorded in the project materials of the current directory. We train on DF2K and evaluate on Set5, Set14, BSD100, Urban100, and Manga109 under \(\times2\), \(\times3\), and \(\times4\) settings. Following standard SR practice, PSNR and SSIM are computed on the Y channel. The lightweight setting uses \(64\times64\) LR patches, batch size 32, AdamW with \((0.9, 0.999)\), weight decay \(10^{-4}\), an initial learning rate of \(5\times10^{-4}\), and cosine decay. Main comparisons use 500K training iterations, while ablations use 300K iterations. Latency is measured on a single RTX 4090 with input size \(3\times256\times256\).
+
+Unless otherwise noted, \method{} uses level scales \([1,2,4]\), head split \([2,1,1]\), dynamic focus ratio range \([0.25, 0.75]\), inheritance weight \(\beta=0.5\), and selective \irca{} on the high- and mid-frequency branches only.
+
+\subsection{Comparison with state of the art}
+Table~\ref{tab:main-x4} reports the \(\times4\) comparison against representative lightweight CNNs and transformers. \method{} does not aim to dominate every smooth benchmark. Instead, it is designed to improve the performance-efficiency trade-off on structure-rich data, and that is exactly what we observe. Relative to \baseline{}, the model improves by \(+0.03\) dB on Set5, \(+0.01\) dB on Set14, \(+0.03\) dB on BSD100, \(+0.37\) dB on Urban100, and \(+0.24\) dB on Manga109. The largest gains appear on Urban100 and Manga109, which strongly support our central claim: once content-aware grouping has identified promising long-range neighbors, multi-level focused interaction is especially beneficial for repetitive structures, thin contours, and texture-rich regions.
+
+\begin{table*}[t]
+\centering
+\caption{Quantitative comparison under \(\times4\) SR on the Y channel. \method{} is strongest on the structure-rich Urban100 and Manga109 benchmarks while remaining competitive on the smoother datasets. Best results are in bold.}
+\label{tab:main-x4}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lcccccc}
+\toprule
+Method & Params & Set5 & Set14 & BSD100 & Urban100 & Manga109 \\
+\midrule
+CARN & 1592K & 32.13 / 0.8937 & 28.60 / 0.7806 & 27.58 / 0.7349 & 26.07 / 0.7837 & 30.42 / 0.9070 \\
+IMDN & 715K & 32.21 / 0.8948 & 28.58 / 0.7811 & 27.56 / 0.7353 & 26.04 / 0.7838 & 30.45 / 0.9075 \\
+RFDN & 550K & 32.24 / 0.8952 & 28.61 / 0.7819 & 27.57 / 0.7360 & 26.11 / 0.7858 & 30.58 / 0.9089 \\
+OSFFNet & 537K & 32.39 / 0.8976 & 28.75 / 0.7852 & 27.66 / 0.7393 & 26.36 / 0.7950 & 30.84 / 0.9125 \\
+ESRT & 751K & 32.19 / 0.8947 & 28.69 / 0.7833 & 27.69 / 0.7379 & 26.39 / 0.7962 & 30.75 / 0.9100 \\
+ELAN-light & 601K & 32.43 / 0.8975 & 28.78 / 0.7858 & 27.69 / 0.7406 & 26.54 / 0.7982 & 30.92 / 0.9150 \\
+SwinIR-light & 897K & 32.44 / 0.8976 & 28.77 / 0.7858 & 27.69 / 0.7406 & 26.47 / 0.7980 & 30.92 / 0.9151 \\
+SPIN & 555K & 32.48 / 0.8983 & 28.80 / 0.7862 & 27.70 / 0.7415 & 26.55 / 0.7998 & 30.98 / 0.9156 \\
+OmniSR & 792K & 32.49 / 0.8988 & 28.78 / 0.7859 & 27.71 / 0.7415 & 26.65 / 0.8018 & 31.02 / 0.9151 \\
+IPG-Tiny & 887K & 32.51 / 0.8987 & 28.85 / 0.7873 & 27.73 / 0.7418 & 26.78 / 0.8050 & 31.22 / 0.9176 \\
+ATD-light & 769K & 32.62 / 0.8997 & 28.87 / 0.7884 & 27.77 / 0.7439 & 26.97 / 0.8107 & 31.47 / 0.9198 \\
+\baseline{} & 535K & 32.58 / 0.8998 & 28.90 / 0.7880 & 27.75 / 0.7427 & 26.87 / 0.8081 & 31.31 / 0.9183 \\
+PFT-light & 792K & \textbf{32.63 / 0.9005} & \textbf{28.92 / 0.7891} & \textbf{27.79 / 0.7445} & 27.20 / 0.8171 & 31.51 / 0.9204 \\
+\textbf{\method{} (Ours)} & 567K & 32.61 / 0.9002 & 28.91 / 0.7888 & 27.78 / 0.7443 & \textbf{27.24 / 0.8179} & \textbf{31.55 / 0.9207} \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+The full \(\times2\) and \(\times3\) comparisons are included in Appendix~\ref{sec:appendix-full-results}. The same trend holds there: our gains are intentionally modest on relatively smooth benchmarks, and more pronounced on Urban100 and Manga109. This pattern is consistent with the design goal of \method{}: to improve structured long-range interaction after content-aware grouping without overcomplicating the backbone.
+
+Two points are worth emphasizing. First, the proposed gains are not concentrated on a single scene category; they remain stable across all reported datasets even when the margin is small. Second, the improvement grows with scene complexity. The strongest gains appear exactly where long-range self-similarity is hardest to exploit with fixed local windows or single-scale grouped attention.
+
+\paragraph{Complexity analysis.}
+Table~\ref{tab:complexity} shows that the proposed design remains lightweight. Although \method{} adds 32K parameters over \baseline{}, it slightly reduces FLOPs and latency. Compared with PFT-light, our model is substantially smaller and faster while still yielding better reconstruction quality on the challenging benchmarks.
+
+\begin{table}[t]
+\centering
+\caption{Model complexity under \(\times4\). The proposed multi-level design preserves the lightweight character of the model and slightly reduces measured FLOPs and latency relative to \baseline{}.}
+\label{tab:complexity}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{lccc}
+\toprule
+Model & Params & FLOPs & Latency \\
+\midrule
+SwinIR-light & 897K & 60.3G & 158.1 ms \\
+\baseline{} & 535K & 46.8G & 86.0 ms \\
+PFT-light & 792K & 69.6G & 121.4 ms \\
+\method{} w/o \lmr{} & 551K & 46.4G & 84.8 ms \\
+\textbf{\method{} (Ours)} & 567K & \textbf{46.1G} & 85.1 ms \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsection{Ablation studies}
+\paragraph{Core module ablation.}
+Table~\ref{tab:ablation-progressive} presents the most important ablation in the paper: a step-by-step evolution from the \baseline{} backbone to the final \method{}. \dpr{} alone already improves Urban100 and Manga109 by organizing more reliable long-range candidates. Adding \pfsa{} or \lmr{} on top of this routed representation further improves recovery, which shows that sparse interaction and coarse-to-fine restoration are complementary rather than redundant. The full combination gives the strongest result, confirming that the three modules should be designed jointly.
+
+\begin{table}[t]
+\centering
+\caption{Core module ablation under \(\times4\). The three proposed modules contribute cumulatively, and the complete design performs best.}
+\label{tab:ablation-progressive}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{clccccc}
+\toprule
+Model & Components & Params & FLOPs & Set5 & Urban100 & Manga109 \\
+\midrule
+A & Backbone + Global Branch + Reconstruction Head & 535K & 46.8G & 32.58 & 26.87 & 31.31 \\
+B & A + \dpr{} & 543K & 46.7G & 32.59 & 26.98 & 31.39 \\
+C & B + \pfsa{} & 551K & 46.4G & 32.60 & 27.12 & 31.47 \\
+D & B + \lmr{} & 559K & 46.5G & 32.60 & 27.10 & 31.46 \\
+E & B + \pfsa{} + \lmr{} (\method{}) & 567K & \textbf{46.1G} & \textbf{32.61} & \textbf{27.24} & \textbf{31.55} \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\paragraph{Dynamic focus ratio.}
+Table~\ref{tab:ablation-ratio} compares fixed sparsity settings with our cluster-aware dynamic focus ratio. A very low keep ratio is too aggressive, while a high keep ratio retains too many weak connections and increases FLOPs. The dynamic strategy reaches the best accuracy-efficiency trade-off with 43\% average retained connections, confirming that subgroup-dependent sparsification is more effective than a global fixed policy.
+
+\begin{table}[t]
+\centering
+\caption{Effect of dynamic focus ratio \(r\) under \(\times4\). Adaptive sparsification achieves the best accuracy-efficiency trade-off by reserving denser interaction for purer subgroups and pruning mixed ones more aggressively.}
+\label{tab:ablation-ratio}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{lcccc}
+\toprule
+Focus strategy & Keep ratio & FLOPs & Urban100 & Manga109 \\
+\midrule
+Fixed \(r=0.25\) & 25\% & 44.9G & 27.00 & 31.39 \\
+Fixed \(r=0.50\) & 50\% & 46.4G & 27.15 & 31.48 \\
+Fixed \(r=0.75\) & 75\% & 48.6G & 27.11 & 31.44 \\
+\textbf{Dynamic \(r\) (Ours)} & 43\% & 46.1G & \textbf{27.24} & \textbf{31.55} \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\input{figures/fig_ablation_gains}
+\caption{Gain over the baseline in the core module ablation. The benefit rises steadily as routing, sparse interaction, and multi-level reconstruction are combined.}
+\label{fig:ablation-gains}
+\end{figure}
+
+Figure~\ref{fig:ablation-gains} further clarifies the ablation story. The gain curve rises steadily from Model A to Model E on both Urban100 and Manga109, which suggests that the final performance is the result of coordinated architectural refinement rather than one dominant component.
+
+\paragraph{Discussion.}
+Additional ablations in the appendix verify that the default head split \([2,1,1]\) is the best balance between structure modeling and texture recovery, level-wise inheritance outperforms a shared attention map, and retaining \irca{} only on the high- and mid-frequency branches is more effective than attaching global interaction to all branches. Together, these observations support the full story of the proposed method: the improvement does not come from one isolated trick, but from aligning routing, sparsification, inheritance, and scale decomposition inside one coherent lightweight block.

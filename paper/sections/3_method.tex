@@ -1,0 +1,108 @@
+\section{Method}
+\label{sec:method}
+
+\subsection{Overview of \method{}}
+\method{} is a lightweight SR network designed for efficient long-range interaction under strict parameter and latency budgets. The network contains three parts: shallow feature extraction, a stack of deep restoration blocks, and a lightweight reconstruction head. We keep the outer pipeline deliberately simple and concentrate the main modeling power inside the proposed \moduleName{}, where grouped tokens are routed, sparsified, and restored in a coarse-to-fine manner.
+
+The central idea of \method{} is that grouped token interaction should be both selective and scale-aware. Rather than applying a single dense operator after content-aware grouping, our block combines image-adaptive routing, focused sparse interaction, and low-to-high multi-level restoration. This lets the model stabilize coarse structure before spending more computation on medium-scale transitions and final high-frequency detail recovery.
+
+\subsection{Overall architecture}
+Given an input low-resolution image \(I_{LR}\), the network first extracts shallow features \(F_0\) with a \(3\times3\) convolution. The deep branch then applies \(T\) residual \moduleName{} stages:
+\begin{equation}
+F_t = F_{t-1} + H_t(F_{t-1}, \mathcal{A}_{t-1}),
+\end{equation}
+where \(H_t(\cdot)\) denotes the \(t\)-th \moduleName{}. The reconstruction head upsamples the final deep features and adds a lightweight skip branch to predict the output image \(I_{SR}\).
+
+The important change is inside each \moduleName{}. Instead of outputting a single attention map, the block maintains a level-wise attention state
+\begin{equation}
+\mathcal{A}_{t} = \{A_t^{lf}, A_t^{mf}, A_t^{hf}\},
+\end{equation}
+which is passed across blocks. This allows coarse, medium, and fine branches to inherit progressively refined attention priors independently.
+
+\begin{figure*}[t]
+\centering
+\resizebox{\textwidth}{!}{\input{figures/fig_method_overview}}
+\caption{Overview of \method{}. The outer backbone remains lightweight, while the main modeling power is concentrated inside the \moduleName{}, where \dpr{} first organizes tokens by image-adaptive prototypes, \pfsa{} filters subgroup connections with level-wise inheritance, and \lmr{} injects coarse structural cues from low to high frequency branches.}
+\label{fig:method-overview}
+\end{figure*}
+
+Figure~\ref{fig:method-overview} summarizes the design logic. We intentionally keep the outer backbone simple. The novelty is concentrated inside the token interaction block, where a single homogeneous attention path is replaced by a coordinated multi-level mechanism.
+
+\subsection{Dynamic Prototype Router}
+Inside each \moduleName{}, the input feature map is first reshaped into a token sequence
+\begin{equation}
+X \in \R^{B \times N \times C}.
+\end{equation}
+We then generate a small set of image-adaptive prototypes
+\begin{equation}
+P \in \R^{B \times M \times C},
+\end{equation}
+and compute token-to-prototype affinities
+\begin{equation}
+S = \mathrm{Softmax}\bigl(\phi(X)\psi(P)^{\top}\bigr).
+\end{equation}
+For each token, the dominant prototype index is
+\begin{equation}
+z_i = \argmax_{m} S_{i,m}.
+\end{equation}
+Sorting tokens by \(z_i\) yields the grouped sequence
+\begin{equation}
+X_s = \mathrm{Sort}(X; z).
+\end{equation}
+
+The key point is that \dpr{} outputs more than a hard grouping label. In addition to the sorted sequence, it keeps the prototype tensor \(P\), routing scores \(S\), and the subgroup label order needed later for purity estimation and masking. This lets the network use the routing uncertainty itself as a signal for dynamic sparsification. Compared with a purely static grouping prior, image-adaptive prototypes also make the grouped interaction more robust to textures that are rare or shifted relative to the training distribution.
+
+\subsection{Progressive Focused Sparse Attention}
+After routing, we split the grouped sequence into three restoration branches:
+\begin{equation}
+X_s = [X^{hf}, X^{mf}, X^{lf}],
+\end{equation}
+where the default head split is \([2,1,1]\) for high-, mid-, and low-frequency processing. The high-frequency branch remains at the original token granularity, while the other two branches are pooled along the sorted sequence:
+\begin{equation}
+X^{mf}_2 = \mathrm{Pool}_2(X^{mf}), \qquad
+X^{lf}_4 = \mathrm{Pool}_4(X^{lf}).
+\end{equation}
+We use segment pooling inside each subgroup rather than global pooling so that the content-aware ordering is preserved.
+
+\paragraph{Cluster-aware dynamic focus ratio.}
+For each level \(\ell \in \{lf,mf,hf\}\), we compute a dynamic focus ratio from subgroup purity and routing-score variance:
+\begin{equation}
+r_{\ell} = \mathrm{clip}\bigl(r_{base} + \lambda_p p_{\ell} - \lambda_v v_{\ell}, r_{min}, r_{max}\bigr),
+\end{equation}
+where \(p_{\ell}\) is the proportion of dominant labels inside the subgroup and \(v_{\ell}\) is the variance of the routing scores. Intuitively, purer groups are allowed to keep denser connections, while mixed groups are more aggressively sparsified. In our experiments, \(r \in [0.25, 0.75]\) works well across scales.
+
+\paragraph{Level-wise attention inheritance.}
+For each level, we compute the current masked attention map \(\hat{A}^{\ell}_t\) from query and key tokens and combine it with the previous block's level-specific prior:
+\begin{equation}
+\tilde{A}^{\ell}_t = \beta A^{\ell}_{t-1} + (1-\beta)\hat{A}^{\ell}_t,
+\end{equation}
+where \(\beta\) is the inheritance weight. We then retain the top-\(k\) entries of \(\tilde{A}^{\ell}_t\) according to \(r_{\ell}\) and compute
+\begin{equation}
+Y^{\ell}_t = \mathrm{Attn}(Q^{\ell}_t, K^{\ell}_t, V^{\ell}_t; \mathrm{TopK}(\tilde{A}^{\ell}_t, r_{\ell})).
+\end{equation}
+Compared with a single shared inherited map, this formulation better matches the semantic roles of different branches: coarse branches emphasize structure repetition, while fine branches prioritize edge and texture refinement.
+
+\subsection{Low-to-High Multi-Level Reconstruction}
+Multi-level processing is not a simple parallel decomposition. We let coarse branches guide finer ones through gated feature injection:
+\begin{equation}
+Y^{lf} = \mathrm{PFSA}(X^{lf}_4),
+\end{equation}
+\begin{equation}
+Y^{mf} = \mathrm{PFSA}(X^{mf}_2 + \gamma_1 \mathrm{Up}(Y^{lf})),
+\end{equation}
+\begin{equation}
+Y^{hf} = \mathrm{PFSA}(X^{hf} + \gamma_2 \mathrm{Up}(Y^{mf})),
+\end{equation}
+where \(\gamma_1\) and \(\gamma_2\) are learnable gates. The final block output is
+\begin{equation}
+Y = \mathrm{Proj}\bigl(\mathrm{Concat}(Y^{hf}, Y^{mf}, Y^{lf})\bigr).
+\end{equation}
+The low-frequency branch is computed first because it captures long-range structure with the largest effective receptive field. The mid-frequency branch then refines regional transitions, and the high-frequency branch focuses on thin edges and repeated textures.
+
+This ordering reflects a restoration prior that is particularly natural for SR: large-scale geometry should be stabilized before the network sharpens contours and textures. The gates prevent excessive coarse information from overwhelming the final detail branch, allowing the model to exploit structural priors without washing out high-frequency content.
+
+\paragraph{Selective global interaction.}
+Each \moduleName{} also includes an \irca{} branch between grouped tokens and the global prototypes \(P\). We apply this mechanism only to the high- and mid-frequency branches. The low-frequency branch already operates on a pooled token sequence with broader context, so attaching the same global prior there adds redundancy more often than benefit. This selective design improves the efficiency-performance trade-off and is confirmed by the ablation in the appendix.
+
+\subsection{Why the design works}
+The proposed block decomposes grouped token interaction into three complementary questions. \dpr{} answers \emph{which} tokens should be neighbors. \pfsa{} answers \emph{which} edges inside the subgroup graph should survive. \lmr{} answers \emph{at what resolution} these edges should be exploited. The resulting coarse-to-fine pipeline is particularly suitable for lightweight SR because it spends most computation on structurally relevant interactions instead of uniformly dense token mixing.
