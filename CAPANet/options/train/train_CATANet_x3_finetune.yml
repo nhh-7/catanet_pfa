@@ -1,5 +1,5 @@
 # general settings for image SR training
-name: train_CATANet_x3_finetune
+name: train_CAPANet_x3_finetune
 model_type: CATANetModel
 scale: 3
 num_gpu: auto
@@ -47,7 +47,7 @@ datasets:
 
 # network structures
 network_g:
-  type: CATANet
+  type: CAPANet
   upscale: 3
 
 # path

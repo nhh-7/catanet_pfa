@@ -1,0 +1,199 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1700 940" role="img" aria-labelledby="title desc">
+  <title id="title">图 5 DPR 模块结构示意图</title>
+  <desc id="desc">DPR 动态语义原型路由模块从归一化输入特征 X 出发，动态生成语义原型 P，计算 Token 与原型之间的关联分数 S，并根据最大关联完成内容归属、Token 排序和候选集合组织，输出 idx_last、sorted_belong_idx、x_scores 和 prototypes 供后续全局交互与渐进聚焦注意力使用。</desc>
+  <defs>
+    <linearGradient id="pageBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.56" stop-color="#f7f7f7"/>
+      <stop offset="1" stop-color="#f4f7f7"/>
+    </linearGradient>
+    <linearGradient id="dprBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5f756e"/>
+      <stop offset="1" stop-color="#6f84a6"/>
+    </linearGradient>
+    <linearGradient id="protoBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef3f1"/>
+      <stop offset="1" stop-color="#edf1f5"/>
+    </linearGradient>
+    <linearGradient id="routeBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7f3eb"/>
+      <stop offset="1" stop-color="#f0ead7"/>
+    </linearGradient>
+    <filter id="shadow" x="-8%" y="-10%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="9" stdDeviation="3" flood-color="#111111" flood-opacity="0.04"/>
+    </filter>
+    <marker id="arrow" markerWidth="13" markerHeight="13" refX="11" refY="6.5" orient="auto">
+      <path d="M1,1 L12,6.5 L1,12 Z" fill="#333333"/>
+    </marker>
+    <marker id="softArrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1,1 L11,6 L1,11 Z" fill="#666666"/>
+    </marker>
+  </defs>
+  <style>
+    .title { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 34px; font-weight: 700; fill: #111111; letter-spacing: 0; }
+    .subtitle { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 20px; fill: #4d4d4d; letter-spacing: 0; }
+    .label { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 22px; font-weight: 700; fill: #111111; letter-spacing: 0; }
+    .module { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 19px; font-weight: 700; fill: #111111; letter-spacing: 0; }
+    .small { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 16px; fill: #4d4d4d; letter-spacing: 0; }
+    .tiny { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 13px; fill: #666666; letter-spacing: 0; }
+    .white { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 22px; font-weight: 700; fill: #ffffff; letter-spacing: 0; }
+    .whiteSmall { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 16px; fill: #eef3f5; letter-spacing: 0; }
+    .math { font-family: "Times New Roman", "Noto Sans CJK SC", serif; font-size: 20px; fill: #333333; letter-spacing: 0; }
+    .mathSmall { font-family: "Times New Roman", "Noto Sans CJK SC", serif; font-size: 17px; fill: #4d4d4d; letter-spacing: 0; }
+    .panel { fill: #ffffff; stroke: #bdbdbd; stroke-width: 2; }
+    .arrowLine { stroke: #333333; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    .softLine { stroke: #666666; stroke-width: 2.2; fill: none; stroke-dasharray: 7 6; marker-end: url(#softArrow); }
+    .tokenStroke { stroke: #ffffff; stroke-width: 1; }
+  </style>
+
+  <rect width="1700" height="940" fill="url(#pageBg)"/>
+  <text x="850" y="58" text-anchor="middle" class="title">DPR 动态语义原型路由模块</text>
+  <text x="850" y="92" text-anchor="middle" class="subtitle">根据输入内容自适应生成语义原型，并将空间分散但语义相近的 Token 组织为候选集合</text>
+
+  <g filter="url(#shadow)">
+    <rect x="70" y="174" width="230" height="230" rx="10" class="panel"/>
+    <text x="185" y="216" text-anchor="middle" class="label">输入特征</text>
+    <text x="185" y="247" text-anchor="middle" class="math">X ∈ R^{B×N×C}</text>
+    <g transform="translate(123 278)">
+      <rect x="0" y="0" width="28" height="28" rx="4" fill="#d4dee2" class="tokenStroke"/>
+      <rect x="32" y="0" width="28" height="28" rx="4" fill="#c7d8d2" class="tokenStroke"/>
+      <rect x="64" y="0" width="28" height="28" rx="4" fill="#cbd6e2" class="tokenStroke"/>
+      <rect x="96" y="0" width="28" height="28" rx="4" fill="#d6c694" class="tokenStroke"/>
+      <rect x="0" y="32" width="28" height="28" rx="4" fill="#aebfca" class="tokenStroke"/>
+      <rect x="32" y="32" width="28" height="28" rx="4" fill="#a9beb6" class="tokenStroke"/>
+      <rect x="64" y="32" width="28" height="28" rx="4" fill="#b3c2d3" class="tokenStroke"/>
+      <rect x="96" y="32" width="28" height="28" rx="4" fill="#c5b27d" class="tokenStroke"/>
+      <rect x="0" y="64" width="28" height="28" rx="4" fill="#d4dee2" class="tokenStroke"/>
+      <rect x="32" y="64" width="28" height="28" rx="4" fill="#9fb3aa" class="tokenStroke"/>
+      <rect x="64" y="64" width="28" height="28" rx="4" fill="#8ea3bd" class="tokenStroke"/>
+      <rect x="96" y="64" width="28" height="28" rx="4" fill="#d6c694" class="tokenStroke"/>
+    </g>
+    <text x="185" y="384" text-anchor="middle" class="tiny">来自 LayerNorm 后的 Token 序列</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="390" y="152" width="290" height="190" rx="10" fill="url(#protoBg)" stroke="#9fb3aa" stroke-width="2.4"/>
+    <text x="535" y="194" text-anchor="middle" class="label">动态原型生成</text>
+    <text x="535" y="228" text-anchor="middle" class="math">P ∈ R^{B×M×C}</text>
+    <g transform="translate(439 254)">
+      <circle cx="24" cy="24" r="18" fill="#5f756e"/>
+      <circle cx="72" cy="24" r="18" fill="#6f84a6"/>
+      <circle cx="120" cy="24" r="18" fill="#8a7a5a"/>
+      <circle cx="168" cy="24" r="18" fill="#7a5f64"/>
+      <text x="24" y="30" text-anchor="middle" class="whiteSmall">p1</text>
+      <text x="72" y="30" text-anchor="middle" class="whiteSmall">p2</text>
+      <text x="120" y="30" text-anchor="middle" class="whiteSmall">p3</text>
+      <text x="168" y="30" text-anchor="middle" class="whiteSmall">pM</text>
+    </g>
+    <text x="535" y="320" text-anchor="middle" class="tiny">由当前输入内容自适应形成语义中心</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="390" y="408" width="290" height="170" rx="10" class="panel"/>
+    <text x="535" y="450" text-anchor="middle" class="label">特征投影</text>
+    <rect x="432" y="482" width="92" height="44" rx="7" fill="#f4f7f7" stroke="#9fb3aa" stroke-width="2"/>
+    <text x="478" y="511" text-anchor="middle" class="module">φ(X)</text>
+    <rect x="546" y="482" width="92" height="44" rx="7" fill="#f5f6f7" stroke="#8ea3bd" stroke-width="2"/>
+    <text x="592" y="511" text-anchor="middle" class="module">ψ(P)</text>
+    <text x="535" y="554" text-anchor="middle" class="tiny">映射到可比较的相似度空间</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="760" y="236" width="300" height="250" rx="10" fill="#ffffff" stroke="#8ea3bd" stroke-width="2.4"/>
+    <text x="910" y="278" text-anchor="middle" class="label">Token-Prototype 关联</text>
+    <text x="910" y="314" text-anchor="middle" class="math">S = Softmax(φ(X)ψ(P)^T)</text>
+    <g transform="translate(814 346)">
+      <rect x="0" y="0" width="192" height="96" rx="6" fill="#f7f7f7" stroke="#bdbdbd" stroke-width="1.8"/>
+      <g>
+        <rect x="12" y="12" width="30" height="18" fill="#dde8e4"/>
+        <rect x="48" y="12" width="30" height="18" fill="#dce3ec"/>
+        <rect x="84" y="12" width="30" height="18" fill="#e7ddca"/>
+        <rect x="120" y="12" width="30" height="18" fill="#eadbdd"/>
+        <rect x="12" y="38" width="30" height="18" fill="#c7d8d2"/>
+        <rect x="48" y="38" width="30" height="18" fill="#cbd6e2"/>
+        <rect x="84" y="38" width="30" height="18" fill="#d6c694"/>
+        <rect x="120" y="38" width="30" height="18" fill="#c7a4a9"/>
+        <rect x="12" y="64" width="30" height="18" fill="#a9beb6"/>
+        <rect x="48" y="64" width="30" height="18" fill="#b3c2d3"/>
+        <rect x="84" y="64" width="30" height="18" fill="#c5b27d"/>
+        <rect x="120" y="64" width="30" height="18" fill="#9a7379"/>
+      </g>
+      <text x="170" y="27" text-anchor="middle" class="tiny">p1</text>
+      <text x="170" y="53" text-anchor="middle" class="tiny">p2</text>
+      <text x="170" y="79" text-anchor="middle" class="tiny">pM</text>
+    </g>
+    <text x="910" y="468" text-anchor="middle" class="tiny">每个 Token 对所有原型形成关联分数 x_scores</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="1140" y="156" width="270" height="180" rx="10" fill="url(#routeBg)" stroke="#c5b27d" stroke-width="2.4"/>
+    <text x="1275" y="198" text-anchor="middle" class="label">内容归属</text>
+    <text x="1275" y="234" text-anchor="middle" class="mathSmall">belong = argmax(S)</text>
+    <g transform="translate(1190 262)">
+      <rect x="0" y="0" width="34" height="28" rx="5" fill="#5f756e"/>
+      <rect x="40" y="0" width="34" height="28" rx="5" fill="#6f84a6"/>
+      <rect x="80" y="0" width="34" height="28" rx="5" fill="#5f756e"/>
+      <rect x="120" y="0" width="34" height="28" rx="5" fill="#8a7a5a"/>
+      <rect x="160" y="0" width="34" height="28" rx="5" fill="#7a5f64"/>
+    </g>
+    <text x="1275" y="318" text-anchor="middle" class="tiny">根据最大关联确定语义组标签</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="1140" y="410" width="270" height="190" rx="10" fill="#ffffff" stroke="#c5b27d" stroke-width="2.4"/>
+    <text x="1275" y="452" text-anchor="middle" class="label">排序与路由组织</text>
+    <text x="1275" y="486" text-anchor="middle" class="mathSmall">sort(belong) → grouped tokens</text>
+    <g transform="translate(1170 516)">
+      <rect x="0" y="0" width="38" height="30" rx="5" fill="#5f756e"/>
+      <rect x="43" y="0" width="38" height="30" rx="5" fill="#5f756e"/>
+      <rect x="86" y="0" width="38" height="30" rx="5" fill="#6f84a6"/>
+      <rect x="129" y="0" width="38" height="30" rx="5" fill="#8a7a5a"/>
+      <rect x="172" y="0" width="38" height="30" rx="5" fill="#7a5f64"/>
+      <path d="M82 -8 L82 38" stroke="#9a9a9a" stroke-width="1.6" stroke-dasharray="5 4"/>
+      <path d="M125 -8 L125 38" stroke="#9a9a9a" stroke-width="1.6" stroke-dasharray="5 4"/>
+      <path d="M168 -8 L168 38" stroke="#9a9a9a" stroke-width="1.6" stroke-dasharray="5 4"/>
+    </g>
+    <text x="1275" y="582" text-anchor="middle" class="tiny">形成 cluster-aware 候选集合</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="520" y="672" width="660" height="178" rx="12" fill="url(#dprBg)"/>
+    <text x="850" y="714" text-anchor="middle" class="white">DPR 输出</text>
+    <text x="850" y="744" text-anchor="middle" class="whiteSmall">为后续全局中心交互、动态焦点率与 PFSA 稀疏注意力提供组织先验</text>
+    <g transform="translate(540 770)">
+      <rect x="0" y="0" width="132" height="48" rx="7" fill="#ffffff" opacity="0.96"/>
+      <text x="66" y="30" text-anchor="middle" class="module">idx_last</text>
+      <rect x="152" y="0" width="178" height="48" rx="7" fill="#ffffff" opacity="0.96"/>
+      <text x="241" y="30" text-anchor="middle" class="module">sorted_belong_idx</text>
+      <rect x="350" y="0" width="132" height="48" rx="7" fill="#ffffff" opacity="0.96"/>
+      <text x="416" y="30" text-anchor="middle" class="module">x_scores</text>
+      <rect x="502" y="0" width="118" height="48" rx="7" fill="#ffffff" opacity="0.96"/>
+      <text x="561" y="30" text-anchor="middle" class="module">prototypes</text>
+    </g>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="1265" y="704" width="350" height="118" rx="10" class="panel"/>
+    <text x="1440" y="742" text-anchor="middle" class="label">后续模块使用</text>
+    <text x="1298" y="780" class="small">prototypes → 全局中心交互</text>
+    <text x="1298" y="808" class="small">x_scores / sorted_belong_idx → PFSA</text>
+  </g>
+
+  <path d="M302 264 C334 252, 356 246, 378 244" class="arrowLine"/>
+  <path d="M302 330 C334 390, 354 470, 378 492" class="arrowLine"/>
+  <path d="M682 247 C720 266, 736 288, 748 316" class="arrowLine"/>
+  <path d="M682 494 C716 476, 735 438, 748 394" class="arrowLine"/>
+  <path d="M1062 326 C1092 308, 1112 278, 1128 246" class="arrowLine"/>
+  <path d="M1275 336 C1275 360, 1275 382, 1275 398" class="arrowLine"/>
+  <path d="M1140 532 C1094 602, 1016 642, 956 668" class="arrowLine"/>
+  <path d="M1275 600 C1266 662, 1218 704, 1184 728" class="softLine"/>
+  <path d="M1180 760 C1210 760, 1234 760, 1252 760" class="softLine"/>
+
+  <g filter="url(#shadow)">
+    <rect x="90" y="684" width="320" height="132" rx="10" class="panel"/>
+    <text x="250" y="726" text-anchor="middle" class="label">设计作用</text>
+    <text x="122" y="764" class="small">打破固定窗口空间限制</text>
+    <text x="122" y="792" class="small">组织远距离重复纹理 Token</text>
+  </g>
+  <path d="M392 708 C438 718, 474 724, 508 738" class="softLine"/>
+</svg>

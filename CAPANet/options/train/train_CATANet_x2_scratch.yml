@@ -1,7 +1,7 @@
 # general settings for image SR training
-name: train_CATANet_x4_finetune
+name: train_CAPANet_x2_scratch
 model_type: CATANetModel
-scale: 4
+scale: 2
 num_gpu: auto
 manual_seed: 3407
 # dataset and data loader settings
@@ -11,12 +11,12 @@ datasets:
     name: DIV2K
     type: PairedImageDataset
     dataroot_gt: /home/featurize/data/DIV2K_train_HR
-    dataroot_lq: /home/featurize/data/DIV2K_train_LR_bicubic/X4
-    filename_tmpl: '{}x4'
+    dataroot_lq: /home/featurize/data/DIV2K_train_LR_bicubic/X2
+    filename_tmpl: '{}x2'
     io_backend:
       type: disk
 
-    gt_size: 256
+    gt_size: 128
     use_hflip: true
     use_rot: true
 
@@ -31,24 +31,24 @@ datasets:
   val_0:
     name: Set5
     type: PairedImageDataset
-    dataroot_gt: /home/featurize/data/TestDataSR/HR/Set5/x4
-    dataroot_lq: /home/featurize/data/TestDataSR/LR/LRBI/Set5/x4
+    dataroot_gt: /home/featurize/data/TestDataSR/HR/Set5/x2
+    dataroot_lq: /home/featurize/data/TestDataSR/LR/LRBI/Set5/x2
     filename_tmpl: '{}'
     io_backend:
       type: disk
   val_1:
     name: Set14
     type: PairedImageDataset
-    dataroot_gt: /home/featurize/data/TestDataSR/HR/Set14/x4
-    dataroot_lq: /home/featurize/data/TestDataSR/LR/LRBI/Set14/x4
+    dataroot_gt: /home/featurize/data/TestDataSR/HR/Set14/x2
+    dataroot_lq: /home/featurize/data/TestDataSR/LR/LRBI/Set14/x2
     filename_tmpl: '{}'
     io_backend:
       type: disk
 
 # network structures
 network_g:
-  type: CATANet
-  upscale: 4
+  type: CAPANet
+  upscale: 2
 
 # path
 path:
@@ -64,21 +64,21 @@ train:
     weight_decay: 0
     betas: [0.9, 0.99]
 
-  accum_iter: 4 
+  accum_iter: 1 
 
   scheduler:
     type: MultiStepLR
-    milestones: [125000, 200000, 225000, 237500]
+    milestones: [300000, 500000, 650000, 700000, 750000]
     gamma: 0.5
 
-  total_iter: 250000
-
+  total_iter: 800000
 
   # losses
   pixel_opt:
     type: L1Loss
     loss_weight: 1.0
     reduction: mean
+
 # validation settings
 val:
   val_freq: !!float 2500
@@ -87,12 +87,12 @@ val:
   metrics:
     psnr: # metric name, can be arbitrary
       type: calculate_psnr_pt
-      crop_border: 4
+      crop_border: 2
       test_y_channel: true
 
     ssim:
       type: calculate_ssim_pt
-      crop_border: 4
+      crop_border: 2
       test_y_channel: true
 
 

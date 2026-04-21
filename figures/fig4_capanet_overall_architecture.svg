@@ -1,0 +1,193 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1700 1020" role="img" aria-labelledby="title desc">
+  <title id="title">图 4 CAPANet 总体结构图</title>
+  <desc id="desc">CAPANet 总体结构由低分辨率输入、浅层特征提取、多个 CAPANet Block、深层特征融合与重建头组成。每个 CAPANet Block 包含 LayerNorm、DPR 动态语义原型路由、全局中心交互、LMR 与 PFSA 多级聚焦重建、投影、轻量前馈细化和残差输出。</desc>
+  <defs>
+    <linearGradient id="pageBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#dbeafe"/>
+    </linearGradient>
+    <linearGradient id="coreBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d9488"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="blockBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ecfeff"/>
+      <stop offset="0.55" stop-color="#eff6ff"/>
+      <stop offset="1" stop-color="#fffbeb"/>
+    </linearGradient>
+    <linearGradient id="imgLr" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#bae6fd"/>
+      <stop offset="0.45" stop-color="#e0f2fe"/>
+      <stop offset="1" stop-color="#a3a3a3"/>
+    </linearGradient>
+    <linearGradient id="imgSr" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#bfdbfe"/>
+      <stop offset="0.48" stop-color="#ecfeff"/>
+      <stop offset="1" stop-color="#65a30d"/>
+    </linearGradient>
+    <filter id="shadow" x="-8%" y="-10%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="9" stdDeviation="9" flood-color="#0f172a" flood-opacity="0.14"/>
+    </filter>
+    <marker id="arrow" markerWidth="13" markerHeight="13" refX="11" refY="6.5" orient="auto">
+      <path d="M1,1 L12,6.5 L1,12 Z" fill="#334155"/>
+    </marker>
+    <marker id="softArrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1,1 L11,6 L1,11 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <style>
+    .title { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 34px; font-weight: 700; fill: #0f172a; letter-spacing: 0; }
+    .subtitle { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 20px; fill: #334155; letter-spacing: 0; }
+    .label { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 21px; font-weight: 700; fill: #111827; letter-spacing: 0; }
+    .small { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 15px; fill: #475569; letter-spacing: 0; }
+    .tiny { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 13px; fill: #475569; letter-spacing: 0; }
+    .white { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 18px; font-weight: 700; fill: #ffffff; letter-spacing: 0; }
+    .module { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 18px; font-weight: 700; fill: #0f172a; letter-spacing: 0; }
+    .moduleSub { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 13px; fill: #334155; letter-spacing: 0; }
+    .math { font-family: "Times New Roman", "Noto Sans CJK SC", serif; font-size: 19px; fill: #334155; letter-spacing: 0; }
+    .panel { fill: #ffffff; stroke: #94a3b8; stroke-width: 2; }
+    .stage { fill: #ffffff; stroke: #94a3b8; stroke-width: 2; }
+    .arrowLine { stroke: #334155; stroke-width: 3.2; fill: none; marker-end: url(#arrow); }
+    .softLine { stroke: #64748b; stroke-width: 2.2; fill: none; stroke-dasharray: 7 6; marker-end: url(#softArrow); }
+    .skipLine { stroke: #0f766e; stroke-width: 2.6; fill: none; stroke-dasharray: 8 6; marker-end: url(#softArrow); }
+  </style>
+
+  <rect width="1700" height="1020" fill="url(#pageBg)"/>
+  <text x="850" y="58" text-anchor="middle" class="title">CAPANet 总体结构</text>
+  <text x="850" y="92" text-anchor="middle" class="subtitle">端到端轻量级单幅图像超分辨率网络：内容路由、渐进聚焦与多级重建协同工作</text>
+
+  <g filter="url(#shadow)">
+    <rect x="70" y="165" width="160" height="200" rx="8" class="stage"/>
+    <rect x="100" y="212" width="100" height="100" rx="6" fill="url(#imgLr)" stroke="#64748b" stroke-width="2"/>
+    <g opacity="0.56" stroke="#ffffff" stroke-width="1">
+      <line x1="125" y1="212" x2="125" y2="312"/>
+      <line x1="150" y1="212" x2="150" y2="312"/>
+      <line x1="175" y1="212" x2="175" y2="312"/>
+      <line x1="100" y1="237" x2="200" y2="237"/>
+      <line x1="100" y1="262" x2="200" y2="262"/>
+      <line x1="100" y1="287" x2="200" y2="287"/>
+    </g>
+    <text x="150" y="194" text-anchor="middle" class="label">LR 输入</text>
+    <text x="150" y="342" text-anchor="middle" class="small">I_LR</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="282" y="185" width="210" height="160" rx="8" class="stage"/>
+    <text x="387" y="235" text-anchor="middle" class="label">浅层特征提取</text>
+    <text x="387" y="272" text-anchor="middle" class="math">F0 = Conv3x3(I_LR)</text>
+    <text x="387" y="306" text-anchor="middle" class="small">局部边缘与基础纹理编码</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="550" y="142" width="600" height="246" rx="12" fill="url(#coreBg)"/>
+    <text x="850" y="184" text-anchor="middle" class="white">N × CAPANet Blocks</text>
+    <text x="850" y="213" text-anchor="middle" class="small" fill="#e0f2fe">跨 Block 传递低频 / 中频 / 高频注意力状态</text>
+
+    <rect x="596" y="244" width="126" height="86" rx="8" fill="#ffffff" opacity="0.96"/>
+    <text x="659" y="275" text-anchor="middle" class="module">Block 1</text>
+    <text x="659" y="302" text-anchor="middle" class="moduleSub">DPR + PFSA + LMR</text>
+
+    <rect x="766" y="244" width="126" height="86" rx="8" fill="#ffffff" opacity="0.96"/>
+    <text x="829" y="275" text-anchor="middle" class="module">Block 2</text>
+    <text x="829" y="302" text-anchor="middle" class="moduleSub">继承聚焦先验</text>
+
+    <text x="944" y="292" text-anchor="middle" class="white">...</text>
+
+    <rect x="980" y="244" width="126" height="86" rx="8" fill="#ffffff" opacity="0.96"/>
+    <text x="1043" y="275" text-anchor="middle" class="module">Block N</text>
+    <text x="1043" y="302" text-anchor="middle" class="moduleSub">深层特征聚合</text>
+
+    <path d="M724 287 L759 287" class="softLine"/>
+    <path d="M894 287 L958 287" class="softLine"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="1210" y="185" width="190" height="160" rx="8" class="stage"/>
+    <text x="1305" y="235" text-anchor="middle" class="label">深层特征融合</text>
+    <text x="1305" y="272" text-anchor="middle" class="math">F_deep</text>
+    <text x="1305" y="306" text-anchor="middle" class="small">聚合内容与层次细节</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="1450" y="165" width="180" height="200" rx="8" class="stage"/>
+    <text x="1540" y="204" text-anchor="middle" class="label">重建头</text>
+    <text x="1540" y="236" text-anchor="middle" class="small">Conv + PixelShuffle</text>
+    <rect x="1488" y="266" width="104" height="66" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-width="1.6"/>
+    <text x="1540" y="306" text-anchor="middle" class="math">×2 / ×3 / ×4</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="70" y="780" width="160" height="180" rx="8" class="stage"/>
+    <rect x="96" y="821" width="108" height="108" rx="6" fill="url(#imgSr)" stroke="#0f766e" stroke-width="2"/>
+    <path d="M96 898 C125 875, 152 887, 204 862 L204 929 L96 929 Z" fill="#65a30d" opacity="0.7"/>
+    <path d="M96 866 L130 822 L160 866 L184 838 L204 870 L204 929 L96 929 Z" fill="#475569" opacity="0.72"/>
+    <text x="150" y="809" text-anchor="middle" class="label">SR 输出</text>
+    <text x="150" y="950" text-anchor="middle" class="small">I_SR</text>
+  </g>
+
+  <path d="M232 265 L270 265" class="arrowLine"/>
+  <path d="M494 265 L538 265" class="arrowLine"/>
+  <path d="M1152 265 L1198 265" class="arrowLine"/>
+  <path d="M1402 265 L1438 265" class="arrowLine"/>
+  <path d="M1540 365 C1540 700, 320 700, 205 785" class="arrowLine"/>
+
+  <path d="M387 346 C388 438, 410 510, 548 570" class="skipLine"/>
+  <text x="466" y="486" text-anchor="middle" class="small">全局残差特征</text>
+
+  <g filter="url(#shadow)">
+    <rect x="220" y="456" width="1260" height="270" rx="14" fill="url(#blockBg)" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="850" y="494" text-anchor="middle" class="label">单个 CAPANet Block 内部结构</text>
+
+    <rect x="260" y="545" width="125" height="90" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="322" y="581" text-anchor="middle" class="module">LayerNorm</text>
+    <text x="322" y="610" text-anchor="middle" class="moduleSub">特征归一化</text>
+
+    <rect x="440" y="535" width="165" height="110" rx="8" fill="#ecfeff" stroke="#14b8a6" stroke-width="2"/>
+    <text x="522" y="572" text-anchor="middle" class="module">DPR</text>
+    <text x="522" y="598" text-anchor="middle" class="moduleSub">动态语义原型路由</text>
+    <text x="522" y="625" text-anchor="middle" class="tiny">prototypes / sorted tokens</text>
+
+    <rect x="660" y="512" width="165" height="82" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+    <text x="742" y="546" text-anchor="middle" class="module">全局中心交互</text>
+    <text x="742" y="572" text-anchor="middle" class="moduleSub">k_global / v_global</text>
+
+    <rect x="660" y="622" width="300" height="70" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="2"/>
+    <text x="810" y="650" text-anchor="middle" class="module">LMR + PFSA</text>
+    <text x="810" y="674" text-anchor="middle" class="moduleSub">低频 → 中频 → 高频渐进聚焦交互</text>
+
+    <rect x="1015" y="545" width="135" height="90" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="1082" y="581" text-anchor="middle" class="module">Proj</text>
+    <text x="1082" y="610" text-anchor="middle" class="moduleSub">Conv1x1</text>
+
+    <rect x="1205" y="545" width="135" height="90" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="1272" y="581" text-anchor="middle" class="module">LFR</text>
+    <text x="1272" y="610" text-anchor="middle" class="moduleSub">FFN / ConvFFN</text>
+
+    <rect x="1380" y="545" width="64" height="90" rx="8" fill="#f0fdfa" stroke="#0f766e" stroke-width="2"/>
+    <text x="1412" y="581" text-anchor="middle" class="module">+</text>
+    <text x="1412" y="610" text-anchor="middle" class="moduleSub">残差</text>
+
+    <path d="M386 590 L428 590" class="arrowLine"/>
+    <path d="M606 590 L648 590" class="arrowLine"/>
+    <path d="M825 553 C870 553, 918 591, 1003 591" class="arrowLine"/>
+    <path d="M960 657 C990 642, 1003 622, 1013 604" class="arrowLine"/>
+    <path d="M1152 590 L1193 590" class="arrowLine"/>
+    <path d="M1342 590 L1368 590" class="arrowLine"/>
+
+    <path d="M522 645 C560 683, 610 690, 650 672" class="softLine"/>
+    <text x="585" y="706" text-anchor="middle" class="tiny">路由索引与内容得分</text>
+
+    <path d="M810 692 C810 716, 850 716, 850 692" class="softLine"/>
+    <text x="912" y="716" text-anchor="middle" class="tiny">attn_state: lf / mf / hf</text>
+
+    <path d="M322 545 C322 500, 1412 500, 1412 538" class="skipLine"/>
+    <text x="868" y="525" text-anchor="middle" class="tiny">Block 内残差连接</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="514" y="792" width="672" height="106" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="850" y="830" text-anchor="middle" class="label">核心信息流</text>
+    <text x="850" y="865" text-anchor="middle" class="small">内容路由 → 关键连接筛选 → 低到高多级交互 → 重建输出</text>
+  </g>
+</svg>

@@ -1,7 +1,7 @@
 # general settings
-name: test_CATANet_x3
+name: test_CAPANet_x2
 model_type: CATANetModel
-scale: 3
+scale: 2
 num_gpu: 1
 manual_seed: 3407
 
@@ -9,8 +9,8 @@ datasets:
   test_1:  # the 1st test dataset
     name: Set5
     type: PairedImageDataset
-    dataroot_gt: /home/featurize/data/TestDataSR/HR/Set5/x3
-    dataroot_lq: /home/featurize/data/TestDataSR/LR/LRBI/Set5/x3
+    dataroot_gt: /home/featurize/data/TestDataSR/HR/Set5/x2
+    dataroot_lq: /home/featurize/data/TestDataSR/LR/LRBI/Set5/x2
     filename_tmpl: '{}'
     io_backend:
       type: disk
@@ -18,8 +18,8 @@ datasets:
   test_2:  # the 2nd test dataset
     name: Set14
     type: PairedImageDataset
-    dataroot_gt: /home/featurize/data/TestDataSR/HR/Set14/x3
-    dataroot_lq: /home/featurize/data/TestDataSR/LR/LRBI/Set14/x3
+    dataroot_gt: /home/featurize/data/TestDataSR/HR/Set14/x2
+    dataroot_lq: /home/featurize/data/TestDataSR/LR/LRBI/Set14/x2
     filename_tmpl: '{}'
     io_backend:
       type: disk
@@ -27,8 +27,8 @@ datasets:
   test_3:  # the 3rd test dataset
     name: B100
     type: PairedImageDataset
-    dataroot_gt: /home/featurize/data/TestDataSR/HR/B100/x3
-    dataroot_lq: /home/featurize/data/TestDataSR/LR/LRBI/B100/x3
+    dataroot_gt: /home/featurize/data/TestDataSR/HR/B100/x2
+    dataroot_lq: /home/featurize/data/TestDataSR/LR/LRBI/B100/x2
     filename_tmpl: '{}'
     io_backend:
       type: disk
@@ -36,8 +36,8 @@ datasets:
   test_4:  # the 4th test dataset
     name: Urban100
     type: PairedImageDataset
-    dataroot_gt: /home/featurize/data/TestDataSR/HR/Urban100/x3
-    dataroot_lq: /home/featurize/data/TestDataSR/LR/LRBI/Urban100/x3
+    dataroot_gt: /home/featurize/data/TestDataSR/HR/Urban100/x2
+    dataroot_lq: /home/featurize/data/TestDataSR/LR/LRBI/Urban100/x2
     filename_tmpl: '{}'
     io_backend:
       type: disk
@@ -45,8 +45,8 @@ datasets:
   test_5:  # the 5th test dataset
     name: Manga109
     type: PairedImageDataset
-    dataroot_gt: /home/featurize/data/TestDataSR/HR/Manga109/x3
-    dataroot_lq: /home/featurize/data/TestDataSR/LR/LRBI/Manga109/x3
+    dataroot_gt: /home/featurize/data/TestDataSR/HR/Manga109/x2
+    dataroot_lq: /home/featurize/data/TestDataSR/LR/LRBI/Manga109/x2
     filename_tmpl: '{}'
     io_backend:
       type: disk
@@ -55,26 +55,26 @@ datasets:
 
 # network structures
 network_g:
-  type: CATANet
-  upscale: 3
+  type: CAPANet
+  upscale: 2
 
 # path
 path:
-  pretrain_network_g: pretrained_models/x3.pth
-  strict_load_g: true
-  results_root: results/CATANet
+  pretrain_network_g: ~
+  strict_load_g: false
+  results_root: results/CAPANet
 
 # validation settings
 val:
   save_img: true
-  suffix: CATANet  # add suffix to saved images, if None, use exp name
+  suffix: CAPANet  # add suffix to saved images, if None, use exp name
 
   metrics:
     psnr: # metric name, can be arbitrary
       type: calculate_psnr_pt
-      crop_border: 3
+      crop_border: 2
       test_y_channel: true
     ssim:
       type: calculate_ssim_pt
-      crop_border: 3
+      crop_border: 2
       test_y_channel: true

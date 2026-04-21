@@ -1,0 +1,201 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1700 980" role="img" aria-labelledby="title desc">
+  <title id="title">图 7 LMR 模块结构示意图</title>
+  <desc id="desc">LMR 低到高多级协同重建模块将路由后的特征拆分为低频、中频和高频三路。低频分支通过 4 倍 token pooling 建模结构轮廓，中频分支通过 2 倍 token pooling 建模边界过渡，高频分支保持原始粒度恢复纹理细节。低频输出经上采样和门控注入中频，中频输出再注入高频，最终三路结果统一粒度后拼接并投影输出。</desc>
+  <defs>
+    <linearGradient id="pageBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#f7f7f7"/>
+      <stop offset="1" stop-color="#f7f3eb"/>
+    </linearGradient>
+    <linearGradient id="lmrBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8a7a5a"/>
+      <stop offset="1" stop-color="#5f756e"/>
+    </linearGradient>
+    <linearGradient id="lfBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f3f3f3"/>
+      <stop offset="1" stop-color="#edf1f5"/>
+    </linearGradient>
+    <linearGradient id="mfBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4f7f7"/>
+      <stop offset="1" stop-color="#eef3f1"/>
+    </linearGradient>
+    <linearGradient id="hfBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7f3eb"/>
+      <stop offset="1" stop-color="#f0ead7"/>
+    </linearGradient>
+    <filter id="shadow" x="-8%" y="-10%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="9" stdDeviation="3" flood-color="#111111" flood-opacity="0.04"/>
+    </filter>
+    <marker id="arrow" markerWidth="13" markerHeight="13" refX="11" refY="6.5" orient="auto">
+      <path d="M1,1 L12,6.5 L1,12 Z" fill="#333333"/>
+    </marker>
+    <marker id="softArrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1,1 L11,6 L1,11 Z" fill="#666666"/>
+    </marker>
+  </defs>
+  <style>
+    .title { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 34px; font-weight: 700; fill: #111111; letter-spacing: 0; }
+    .subtitle { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 20px; fill: #4d4d4d; letter-spacing: 0; }
+    .label { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 22px; font-weight: 700; fill: #111111; letter-spacing: 0; }
+    .module { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 19px; font-weight: 700; fill: #111111; letter-spacing: 0; }
+    .small { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 16px; fill: #4d4d4d; letter-spacing: 0; }
+    .tiny { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 13px; fill: #666666; letter-spacing: 0; }
+    .white { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 22px; font-weight: 700; fill: #ffffff; letter-spacing: 0; }
+    .whiteSmall { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 15px; fill: #f5f2df; letter-spacing: 0; }
+    .math { font-family: "Times New Roman", "Noto Sans CJK SC", serif; font-size: 20px; fill: #333333; letter-spacing: 0; }
+    .mathSmall { font-family: "Times New Roman", "Noto Sans CJK SC", serif; font-size: 17px; fill: #4d4d4d; letter-spacing: 0; }
+    .panel { fill: #ffffff; stroke: #bdbdbd; stroke-width: 2; }
+    .arrowLine { stroke: #333333; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    .softLine { stroke: #666666; stroke-width: 2.2; fill: none; stroke-dasharray: 7 6; marker-end: url(#softArrow); }
+    .gateLine { stroke: #8a7a5a; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    .globalLine { stroke: #6f84a6; stroke-width: 2.2; fill: none; stroke-dasharray: 8 6; marker-end: url(#softArrow); }
+  </style>
+
+  <rect width="1700" height="980" fill="url(#pageBg)"/>
+  <text x="850" y="58" text-anchor="middle" class="title">LMR 低到高多级协同重建模块</text>
+  <text x="850" y="92" text-anchor="middle" class="subtitle">显式划分低频、中频、高频特征，并通过逐级注入实现由结构到纹理的递进式恢复</text>
+
+  <g filter="url(#shadow)">
+    <rect x="74" y="172" width="250" height="250" rx="10" class="panel"/>
+    <text x="199" y="214" text-anchor="middle" class="label">路由后特征</text>
+    <text x="199" y="248" text-anchor="middle" class="math">X_r</text>
+    <text x="199" y="276" text-anchor="middle" class="tiny">来自 DPR 排序后的 Token 序列</text>
+    <g transform="translate(94 306)">
+      <rect x="0" y="0" width="22" height="30" rx="5" fill="#dde8e4" stroke="#ffffff" stroke-width="1.2"/>
+      <rect x="27" y="0" width="22" height="30" rx="5" fill="#a9beb6" stroke="#ffffff" stroke-width="1.2"/>
+      <rect x="54" y="0" width="22" height="30" rx="5" fill="#dce3ec" stroke="#ffffff" stroke-width="1.2"/>
+      <rect x="81" y="0" width="22" height="30" rx="5" fill="#cbd6e2" stroke="#ffffff" stroke-width="1.2"/>
+      <rect x="108" y="0" width="22" height="30" rx="5" fill="#b3c2d3" stroke="#ffffff" stroke-width="1.2"/>
+      <rect x="135" y="0" width="22" height="30" rx="5" fill="#e7ddca" stroke="#ffffff" stroke-width="1.2"/>
+      <rect x="162" y="0" width="22" height="30" rx="5" fill="#d6c694" stroke="#ffffff" stroke-width="1.2"/>
+      <rect x="189" y="0" width="22" height="30" rx="5" fill="#c5b27d" stroke="#ffffff" stroke-width="1.2"/>
+      <path d="M51 -5 L51 38" stroke="#9a9a9a" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <path d="M132 -5 L132 38" stroke="#9a9a9a" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <text x="25" y="58" text-anchor="middle" class="tiny">组1</text>
+      <text x="92" y="58" text-anchor="middle" class="tiny">组2</text>
+      <text x="173" y="58" text-anchor="middle" class="tiny">组3</text>
+    </g>
+    <text x="199" y="398" text-anchor="middle" class="tiny">内容相似 Token 邻接成段</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="394" y="132" width="300" height="165" rx="10" class="panel"/>
+    <text x="544" y="174" text-anchor="middle" class="label">通道 / Head 拆分</text>
+    <text x="544" y="208" text-anchor="middle" class="math">X_r = [X_lf, X_mf, X_hf]</text>
+    <text x="544" y="242" text-anchor="middle" class="small">head_split = [2, 1, 1]</text>
+    <text x="544" y="274" text-anchor="middle" class="tiny">按频率职责划分不同计算粒度</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="394" y="368" width="300" height="260" rx="10" fill="#ffffff" stroke="#9a9a9a" stroke-width="2"/>
+    <text x="544" y="410" text-anchor="middle" class="label">Segment Pooling</text>
+    <text x="544" y="442" text-anchor="middle" class="small">在排序后的 subgroup 内局部聚合</text>
+    <g transform="translate(424 464)">
+      <text x="0" y="18" class="tiny">HF 原始粒度</text>
+      <rect x="96" y="2" width="26" height="24" rx="5" fill="#edf1f5" stroke="#ffffff" stroke-width="1.1"/>
+      <rect x="130" y="2" width="26" height="24" rx="5" fill="#dce3ec" stroke="#ffffff" stroke-width="1.1"/>
+      <rect x="164" y="2" width="26" height="24" rx="5" fill="#dde8e4" stroke="#ffffff" stroke-width="1.1"/>
+      <rect x="198" y="2" width="26" height="24" rx="5" fill="#e7ddca" stroke="#ffffff" stroke-width="1.1"/>
+      <path d="M160 31 L160 48" stroke="#666666" stroke-width="1.6" fill="none" marker-end="url(#softArrow)"/>
+
+      <text x="0" y="72" class="tiny">MF 2×池化</text>
+      <rect x="104" y="56" width="48" height="24" rx="5" fill="#cbd6e2" stroke="#ffffff" stroke-width="1.1"/>
+      <rect x="168" y="56" width="48" height="24" rx="5" fill="#c7d8d2" stroke="#ffffff" stroke-width="1.1"/>
+      <path d="M160 85 L160 102" stroke="#666666" stroke-width="1.6" fill="none" marker-end="url(#softArrow)"/>
+
+      <text x="0" y="126" class="tiny">LF 4×池化</text>
+      <rect x="118" y="110" width="84" height="26" rx="5" fill="#8a7a5a"/>
+      <text x="160" y="128" text-anchor="middle" class="whiteSmall">段池化结果</text>
+    </g>
+    <text x="544" y="616" text-anchor="middle" class="tiny">标签同步众数池化，保持分段一致</text>
+  </g>
+
+  <path d="M326 276 C356 246, 372 218, 382 202" class="arrowLine"/>
+  <path d="M544 298 C544 324, 544 344, 544 358" class="arrowLine"/>
+
+  <g filter="url(#shadow)">
+    <rect x="770" y="122" width="330" height="205" rx="10" fill="url(#lfBg)" stroke="#666666" stroke-width="2.4"/>
+    <text x="935" y="164" text-anchor="middle" class="label">低频级 LF</text>
+    <text x="935" y="198" text-anchor="middle" class="small">1 head · 4× token pooling</text>
+    <text x="935" y="228" text-anchor="middle" class="mathSmall">Y_lf = PFSA(X_lf)</text>
+    <rect x="822" y="256" width="226" height="42" rx="7" fill="#ffffff" stroke="#bdbdbd" stroke-width="1.6"/>
+    <text x="935" y="283" text-anchor="middle" class="module">结构轮廓与大范围关系</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="770" y="388" width="330" height="220" rx="10" fill="url(#mfBg)" stroke="#9fb3aa" stroke-width="2.4"/>
+    <text x="935" y="430" text-anchor="middle" class="label">中频级 MF</text>
+    <text x="935" y="464" text-anchor="middle" class="small">1 head · 2× token pooling</text>
+    <text x="935" y="494" text-anchor="middle" class="mathSmall">X_mf_hat = X_mf + γ1 · Up(Y_lf)</text>
+    <text x="935" y="524" text-anchor="middle" class="mathSmall">Y_mf = PFSA(X_mf_hat)</text>
+    <rect x="822" y="552" width="226" height="42" rx="7" fill="#ffffff" stroke="#dde8e4" stroke-width="1.6"/>
+    <text x="935" y="579" text-anchor="middle" class="module">边界过渡与区域结构</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="770" y="678" width="330" height="220" rx="10" fill="url(#hfBg)" stroke="#c5b27d" stroke-width="2.4"/>
+    <text x="935" y="720" text-anchor="middle" class="label">高频级 HF</text>
+    <text x="935" y="754" text-anchor="middle" class="small">2 heads · 原始 Token 粒度</text>
+    <text x="935" y="784" text-anchor="middle" class="mathSmall">X_hf_hat = X_hf + γ2 · Up(Y_mf)</text>
+    <text x="935" y="814" text-anchor="middle" class="mathSmall">Y_hf = PFSA(X_hf_hat)</text>
+    <rect x="822" y="842" width="226" height="42" rx="7" fill="#ffffff" stroke="#e7ddca" stroke-width="1.6"/>
+    <text x="935" y="869" text-anchor="middle" class="module">边缘、纹理与重复细节</text>
+  </g>
+
+  <path d="M696 498 C730 390, 748 254, 758 226" class="arrowLine"/>
+  <path d="M696 498 C728 498, 746 498, 758 498" class="arrowLine"/>
+  <path d="M696 498 C730 604, 748 760, 758 786" class="arrowLine"/>
+
+  <g>
+    <path d="M935 328 C935 350, 935 364, 935 378" class="gateLine"/>
+    <rect x="962" y="342" width="92" height="34" rx="6" fill="#ffffff" stroke="#8a7a5a" stroke-width="1.6"/>
+    <text x="1008" y="365" text-anchor="middle" class="module">γ1 · Up</text>
+    <path d="M935 608 C935 632, 935 652, 935 668" class="gateLine"/>
+    <rect x="962" y="628" width="92" height="34" rx="6" fill="#ffffff" stroke="#8a7a5a" stroke-width="1.6"/>
+    <text x="1008" y="651" text-anchor="middle" class="module">γ2 · Up</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="1186" y="164" width="310" height="160" rx="10" class="panel"/>
+    <text x="1341" y="206" text-anchor="middle" class="label">全局分支接入</text>
+    <text x="1341" y="242" text-anchor="middle" class="small">中频级与高频级接入</text>
+    <text x="1341" y="270" text-anchor="middle" class="small">低频级不叠加全局分支</text>
+    <text x="1341" y="300" text-anchor="middle" class="tiny">避免低频分支过度冗余</text>
+  </g>
+
+  <path d="M1186 244 C1142 278, 1118 412, 1104 482" class="globalLine"/>
+  <path d="M1341 324 C1338 542, 1178 712, 1110 778" class="globalLine"/>
+
+  <g filter="url(#shadow)">
+    <rect x="1190" y="448" width="320" height="266" rx="10" fill="#ffffff" stroke="#bdbdbd" stroke-width="2"/>
+    <text x="1350" y="490" text-anchor="middle" class="label">统一粒度与融合</text>
+    <rect x="1244" y="524" width="212" height="38" rx="7" fill="#f3f3f3" stroke="#bdbdbd" stroke-width="1.6"/>
+    <text x="1350" y="549" text-anchor="middle" class="module">Up / Restore(Y_lf)</text>
+    <rect x="1244" y="576" width="212" height="38" rx="7" fill="#f4f7f7" stroke="#dde8e4" stroke-width="1.6"/>
+    <text x="1350" y="601" text-anchor="middle" class="module">Up / Restore(Y_mf)</text>
+    <rect x="1244" y="628" width="212" height="38" rx="7" fill="#f7f3eb" stroke="#e7ddca" stroke-width="1.6"/>
+    <text x="1350" y="653" text-anchor="middle" class="module">Y_hf</text>
+    <text x="1350" y="694" text-anchor="middle" class="mathSmall">Y = Proj(Concat(Y_lf,Y_mf,Y_hf))</text>
+  </g>
+
+  <path d="M1102 224 C1142 270, 1164 402, 1178 504" class="softLine"/>
+  <path d="M1102 498 C1130 516, 1154 540, 1178 576" class="softLine"/>
+  <path d="M1102 788 C1138 752, 1162 700, 1178 650" class="softLine"/>
+
+  <g filter="url(#shadow)">
+    <rect x="1200" y="788" width="300" height="94" rx="10" fill="url(#lmrBg)"/>
+    <text x="1350" y="826" text-anchor="middle" class="white">LMR 输出</text>
+    <text x="1350" y="858" text-anchor="middle" class="whiteSmall">多级协同重建特征 Y</text>
+  </g>
+
+  <path d="M1350 714 C1350 742, 1350 766, 1350 778" class="arrowLine"/>
+
+  <g filter="url(#shadow)">
+    <rect x="86" y="704" width="520" height="168" rx="10" class="panel"/>
+    <text x="346" y="746" text-anchor="middle" class="label">模块作用</text>
+    <text x="126" y="786" class="small">低频分支先稳定主体结构与长程轮廓</text>
+    <text x="126" y="816" class="small">中频分支承接结构边界与区域过渡</text>
+    <text x="126" y="846" class="small">高频分支在结构约束下恢复细粒度纹理</text>
+  </g>
+  <path d="M608 788 C652 792, 704 792, 758 790" class="softLine"/>
+</svg>

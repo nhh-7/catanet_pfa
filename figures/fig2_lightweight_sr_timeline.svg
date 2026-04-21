@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 410" role="img" aria-labelledby="title desc">
+  <title id="title">图 2 轻量级图像超分辨率技术发展脉络图</title>
+  <desc id="desc">横向年份时间轴形式的轻量级图像超分辨率技术发展脉络图。时间轴从 2014 年到 2025 年，先给出 SRCNN、EDSR、RCAN 等深度超分辨率基础方法，再列出 SwinIR、ELAN、HAT、DAT、CRAFT、NGswin、Omni-SR、SPIN、ATD、IPG、CFAT、PCSR、MTKD、UCIP、AdaBM、CATANet、PFT、AutoLUT、PTQ、ConvAttn 和 IM-LUT 等与高效 Transformer、内容自适应建模及部署友好推理相关的代表方法。</desc>
+  <defs>
+    <marker id="tickArrow" markerWidth="8" markerHeight="8" refX="4" refY="7" orient="auto">
+      <path d="M0,0 L8,0 L4,8 Z" fill="#4d4d4d"/>
+    </marker>
+  </defs>
+  <style>
+    .method { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 18px; fill: #111111; letter-spacing: 0; }
+    .year { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 26px; fill: #555555; letter-spacing: 0; }
+    .stage { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 16px; fill: #555555; letter-spacing: 0; }
+    .axis { stroke: #6f8fa8; stroke-width: 14; stroke-linecap: square; }
+    .base { stroke: #d9d9d9; stroke-width: 5; stroke-linecap: square; }
+    .tick { stroke: #9a9a9a; stroke-width: 3; }
+    .guide { stroke: #d5d5d5; stroke-width: 3; stroke-dasharray: 7 6; }
+    .dot { fill: #5f5f5f; }
+    .yearDot { fill: #0f78a8; }
+  </style>
+
+  <rect width="1500" height="410" fill="#ffffff"/>
+
+  <line x1="80" y1="250" x2="1440" y2="250" class="base"/>
+  <line x1="80" y1="118" x2="1420" y2="118" class="axis"/>
+
+  <g>
+    <line x1="100" y1="60" x2="100" y2="250" class="guide"/>
+    <line x1="100" y1="58" x2="100" y2="116" class="tick"/>
+    <circle cx="100" cy="124" r="5" class="dot"/>
+    <circle cx="100" cy="250" r="14" class="yearDot"/>
+    <text x="73" y="302" class="year">2014</text>
+    <text x="54" y="36" class="method">
+      <tspan x="54" dy="0">SRCNN</tspan>
+    </text>
+  </g>
+
+  <g>
+    <line x1="245" y1="60" x2="245" y2="250" class="guide"/>
+    <line x1="245" y1="58" x2="245" y2="116" class="tick"/>
+    <circle cx="245" cy="124" r="5" class="dot"/>
+    <circle cx="245" cy="250" r="14" class="yearDot"/>
+    <text x="218" y="302" class="year">2017</text>
+    <text x="202" y="36" class="method">
+      <tspan x="202" dy="0">EDSR</tspan>
+    </text>
+  </g>
+
+  <g>
+    <line x1="370" y1="60" x2="370" y2="250" class="guide"/>
+    <line x1="370" y1="58" x2="370" y2="116" class="tick"/>
+    <circle cx="370" cy="124" r="5" class="dot"/>
+    <circle cx="370" cy="250" r="14" class="yearDot"/>
+    <text x="343" y="302" class="year">2018</text>
+    <text x="328" y="36" class="method">
+      <tspan x="328" dy="0">RCAN</tspan>
+    </text>
+  </g>
+
+  <g>
+    <line x1="525" y1="60" x2="525" y2="250" class="guide"/>
+    <line x1="525" y1="58" x2="525" y2="116" class="tick"/>
+    <circle cx="525" cy="124" r="5" class="dot"/>
+    <circle cx="525" cy="250" r="14" class="yearDot"/>
+    <text x="498" y="302" class="year">2021</text>
+    <text x="484" y="36" class="method">
+      <tspan x="484" dy="0">SwinIR</tspan>
+    </text>
+  </g>
+
+  <g>
+    <line x1="660" y1="60" x2="660" y2="250" class="guide"/>
+    <line x1="660" y1="58" x2="660" y2="116" class="tick"/>
+    <circle cx="660" cy="124" r="5" class="dot"/>
+    <circle cx="660" cy="250" r="14" class="yearDot"/>
+    <text x="633" y="302" class="year">2022</text>
+    <text x="632" y="36" class="method">
+      <tspan x="632" dy="0">ELAN</tspan>
+    </text>
+  </g>
+
+  <g>
+    <line x1="815" y1="48" x2="815" y2="250" class="guide"/>
+    <line x1="815" y1="46" x2="815" y2="116" class="tick"/>
+    <circle cx="815" cy="124" r="5" class="dot"/>
+    <circle cx="815" cy="250" r="14" class="yearDot"/>
+    <text x="788" y="302" class="year">2023</text>
+    <text x="728" y="22" class="method">
+      <tspan x="728" dy="0">HAT</tspan>
+      <tspan x="728" dy="22">DAT</tspan>
+      <tspan x="728" dy="22">CRAFT</tspan>
+    </text>
+    <text x="854" y="44" class="method">
+      <tspan x="854" dy="0">NGswin</tspan>
+      <tspan x="854" dy="22">Omni-SR</tspan>
+      <tspan x="854" dy="22">SPIN</tspan>
+    </text>
+  </g>
+
+  <g>
+    <line x1="1030" y1="36" x2="1030" y2="250" class="guide"/>
+    <line x1="1030" y1="34" x2="1030" y2="116" class="tick"/>
+    <circle cx="1030" cy="124" r="5" class="dot"/>
+    <circle cx="1030" cy="250" r="14" class="yearDot"/>
+    <text x="1003" y="302" class="year">2024</text>
+    <text x="958" y="18" class="method">
+      <tspan x="958" dy="0">ATD</tspan>
+      <tspan x="958" dy="22">IPG</tspan>
+      <tspan x="958" dy="22">CFAT</tspan>
+    </text>
+    <text x="1062" y="22" class="method">
+      <tspan x="1062" dy="0">PCSR</tspan>
+      <tspan x="1062" dy="22">MTKD</tspan>
+      <tspan x="1062" dy="22">UCIP</tspan>
+      <tspan x="1062" dy="22">AdaBM</tspan>
+    </text>
+  </g>
+
+  <g>
+    <line x1="1260" y1="36" x2="1260" y2="250" class="guide"/>
+    <line x1="1260" y1="34" x2="1260" y2="116" class="tick"/>
+    <circle cx="1260" cy="124" r="5" class="dot"/>
+    <circle cx="1260" cy="250" r="14" class="yearDot"/>
+    <text x="1233" y="302" class="year">2025</text>
+    <text x="1158" y="42" class="method">
+      <tspan x="1158" dy="0">CATANet</tspan>
+      <tspan x="1158" dy="22">PFT</tspan>
+    </text>
+    <text x="1315" y="18" class="method">
+      <tspan x="1315" dy="0">AutoLUT</tspan>
+      <tspan x="1315" dy="22">PTQ</tspan>
+      <tspan x="1315" dy="22">ConvAttn</tspan>
+      <tspan x="1315" dy="22">IM-LUT</tspan>
+    </text>
+  </g>
+
+  <text x="180" y="365" class="stage">深度卷积基础</text>
+  <text x="365" y="365" class="stage">残差注意力增强</text>
+  <text x="585" y="365" class="stage">SR Transformer 形成</text>
+  <text x="835" y="365" class="stage">高效聚合与内容组织</text>
+  <text x="1060" y="365" class="stage">自适应计算与部署优化</text>
+  <text x="1260" y="365" class="stage">内容聚合、渐进聚焦与查表推理</text>
+</svg>
