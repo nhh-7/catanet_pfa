@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1700 940" role="img" aria-labelledby="title desc">
   <title id="title">图 5 DPR 模块结构示意图</title>
-  <desc id="desc">DPR 动态语义原型路由模块从归一化输入特征 X 出发，动态生成语义原型 P，计算 Token 与原型之间的关联分数 S，并根据最大关联完成内容归属、Token 排序和候选集合组织，输出 idx_last、sorted_belong_idx、x_scores 和 prototypes 供后续全局交互与渐进聚焦注意力使用。</desc>
+  <desc id="desc">DPR 动态语义原型路由模块从归一化输入特征 X 出发，先通过 soft assignment 聚合内容原型 P_content，再结合 prototype query refine 得到最终动态原型 P；随后重新计算 Token 与最终原型之间的关联分数 S，并根据 belong_idx 与 x_scores 完成 Token 排序和候选集合组织，输出 idx_last、sorted_belong_idx、x_scores 和 prototypes 供后续全局中心弱分支与渐进聚焦稀疏注意力使用。</desc>
   <defs>
     <linearGradient id="pageBg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#ffffff"/>
@@ -73,9 +73,10 @@
 
   <g filter="url(#shadow)">
     <rect x="390" y="152" width="290" height="190" rx="10" fill="url(#protoBg)" stroke="#9fb3aa" stroke-width="2.4"/>
-    <text x="535" y="194" text-anchor="middle" class="label">动态原型生成</text>
-    <text x="535" y="228" text-anchor="middle" class="math">P ∈ R^{B×M×C}</text>
-    <g transform="translate(439 254)">
+    <text x="535" y="190" text-anchor="middle" class="label">动态原型生成</text>
+    <text x="535" y="220" text-anchor="middle" class="mathSmall">E = f_embed(X)</text>
+    <text x="535" y="244" text-anchor="middle" class="mathSmall">S0 → P_content = Norm(W^T X)</text>
+    <g transform="translate(439 262)">
       <circle cx="24" cy="24" r="18" fill="#5f756e"/>
       <circle cx="72" cy="24" r="18" fill="#6f84a6"/>
       <circle cx="120" cy="24" r="18" fill="#8a7a5a"/>
@@ -85,17 +86,17 @@
       <text x="120" y="30" text-anchor="middle" class="whiteSmall">p3</text>
       <text x="168" y="30" text-anchor="middle" class="whiteSmall">pM</text>
     </g>
-    <text x="535" y="320" text-anchor="middle" class="tiny">由当前输入内容自适应形成语义中心</text>
+    <text x="535" y="324" text-anchor="middle" class="tiny">Soft assignment + Q_proto refine → P</text>
   </g>
 
   <g filter="url(#shadow)">
     <rect x="390" y="408" width="290" height="170" rx="10" class="panel"/>
-    <text x="535" y="450" text-anchor="middle" class="label">特征投影</text>
+    <text x="535" y="450" text-anchor="middle" class="label">最终关联投影</text>
     <rect x="432" y="482" width="92" height="44" rx="7" fill="#f4f7f7" stroke="#9fb3aa" stroke-width="2"/>
     <text x="478" y="511" text-anchor="middle" class="module">φ(X)</text>
     <rect x="546" y="482" width="92" height="44" rx="7" fill="#f5f6f7" stroke="#8ea3bd" stroke-width="2"/>
     <text x="592" y="511" text-anchor="middle" class="module">ψ(P)</text>
-    <text x="535" y="554" text-anchor="middle" class="tiny">映射到可比较的相似度空间</text>
+    <text x="535" y="554" text-anchor="middle" class="tiny">用 refined prototypes P 重新路由</text>
   </g>
 
   <g filter="url(#shadow)">
@@ -122,27 +123,28 @@
       <text x="170" y="53" text-anchor="middle" class="tiny">p2</text>
       <text x="170" y="79" text-anchor="middle" class="tiny">pM</text>
     </g>
-    <text x="910" y="468" text-anchor="middle" class="tiny">每个 Token 对所有原型形成关联分数 x_scores</text>
+    <text x="910" y="468" text-anchor="middle" class="tiny">S 为关联矩阵，x_scores = max(S)</text>
   </g>
 
   <g filter="url(#shadow)">
     <rect x="1140" y="156" width="270" height="180" rx="10" fill="url(#routeBg)" stroke="#c5b27d" stroke-width="2.4"/>
     <text x="1275" y="198" text-anchor="middle" class="label">内容归属</text>
-    <text x="1275" y="234" text-anchor="middle" class="mathSmall">belong = argmax(S)</text>
-    <g transform="translate(1190 262)">
+    <text x="1275" y="230" text-anchor="middle" class="mathSmall">belong_idx = argmax(S)</text>
+    <text x="1275" y="255" text-anchor="middle" class="mathSmall">x_scores = max(S)</text>
+    <g transform="translate(1190 272)">
       <rect x="0" y="0" width="34" height="28" rx="5" fill="#5f756e"/>
       <rect x="40" y="0" width="34" height="28" rx="5" fill="#6f84a6"/>
       <rect x="80" y="0" width="34" height="28" rx="5" fill="#5f756e"/>
       <rect x="120" y="0" width="34" height="28" rx="5" fill="#8a7a5a"/>
       <rect x="160" y="0" width="34" height="28" rx="5" fill="#7a5f64"/>
     </g>
-    <text x="1275" y="318" text-anchor="middle" class="tiny">根据最大关联确定语义组标签</text>
+    <text x="1275" y="322" text-anchor="middle" class="tiny">根据最终原型确定语义组标签</text>
   </g>
 
   <g filter="url(#shadow)">
     <rect x="1140" y="410" width="270" height="190" rx="10" fill="#ffffff" stroke="#c5b27d" stroke-width="2.4"/>
     <text x="1275" y="452" text-anchor="middle" class="label">排序与路由组织</text>
-    <text x="1275" y="486" text-anchor="middle" class="mathSmall">sort(belong) → grouped tokens</text>
+    <text x="1275" y="486" text-anchor="middle" class="mathSmall">sort(belong_idx, x_scores)</text>
     <g transform="translate(1170 516)">
       <rect x="0" y="0" width="38" height="30" rx="5" fill="#5f756e"/>
       <rect x="43" y="0" width="38" height="30" rx="5" fill="#5f756e"/>
@@ -159,7 +161,7 @@
   <g filter="url(#shadow)">
     <rect x="520" y="672" width="660" height="178" rx="12" fill="url(#dprBg)"/>
     <text x="850" y="714" text-anchor="middle" class="white">DPR 输出</text>
-    <text x="850" y="744" text-anchor="middle" class="whiteSmall">为后续全局中心交互、动态焦点率与 PFSA 稀疏注意力提供组织先验</text>
+    <text x="850" y="744" text-anchor="middle" class="whiteSmall">为后续全局中心弱分支、动态焦点率与 PFSA 稀疏注意力提供组织先验</text>
     <g transform="translate(540 770)">
       <rect x="0" y="0" width="132" height="48" rx="7" fill="#ffffff" opacity="0.96"/>
       <text x="66" y="30" text-anchor="middle" class="module">idx_last</text>
@@ -175,7 +177,7 @@
   <g filter="url(#shadow)">
     <rect x="1265" y="704" width="350" height="118" rx="10" class="panel"/>
     <text x="1440" y="742" text-anchor="middle" class="label">后续模块使用</text>
-    <text x="1298" y="780" class="small">prototypes → 全局中心交互</text>
+    <text x="1298" y="780" class="small">prototypes → 全局中心弱分支</text>
     <text x="1298" y="808" class="small">x_scores / sorted_belong_idx → PFSA</text>
   </g>
 

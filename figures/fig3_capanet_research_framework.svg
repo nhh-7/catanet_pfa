@@ -1,160 +1,127 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="15 12 1070 725" role="img" aria-labelledby="title desc">
   <title id="title">图 3 CAPANet 研究内容框架图</title>
-  <desc id="desc">参考黑白树状研究内容框架图绘制。图中从 CAPANet 研究主题出发，分为关键问题和研究策略两条主线，进一步对应跨区域相似纹理组织不足、无效注意力连接较多、层次化重建不足三个问题，以及 DPR、PFSA、LMR 三项研究策略，最终汇总为三个研究内容。</desc>
+  <desc id="desc">CAPANet 研究内容框架图。图中按照研究内容一、研究内容二和研究内容三三条横向链路展开，每条链路均由研究问题、研究目标和研究方法组成，并通过候选集合和有效交互体现三项研究内容之间的递进关系。</desc>
   <defs>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="5" orient="auto">
       <path d="M0,0 L10,5 L0,10 Z" fill="#000000"/>
+    </marker>
+    <marker id="arrowSmall" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#000000"/>
     </marker>
   </defs>
   <style>
     .box { fill: #ffffff; stroke: #000000; stroke-width: 2.2; }
     .line { stroke: #000000; stroke-width: 2.1; fill: none; }
     .arrow { stroke: #000000; stroke-width: 2.1; fill: none; marker-end: url(#arrow); }
-    .titleText { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 25px; font-weight: 700; fill: #000000; letter-spacing: 0; }
-    .nodeText { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 24px; fill: #000000; letter-spacing: 0; }
-    .nodeBold { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 24px; font-weight: 700; fill: #000000; letter-spacing: 0; }
-    .verticalText { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 23px; fill: #000000; letter-spacing: 0; }
-    .bodyText { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 20px; fill: #000000; letter-spacing: 0; }
-    .linkText { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 21px; fill: #000000; letter-spacing: 0; }
+    .smallArrow { stroke: #000000; stroke-width: 1.9; fill: none; marker-end: url(#arrowSmall); }
+    .titleText { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 27px; font-weight: 700; fill: #000000; letter-spacing: 0; }
+    .headerText { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 24px; font-weight: 700; fill: #000000; letter-spacing: 0; }
+    .labelText { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 22px; font-weight: 700; fill: #000000; letter-spacing: 0; }
+    .bodyText { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 19px; fill: #000000; letter-spacing: 0; }
+    .smallText { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 18px; fill: #000000; letter-spacing: 0; }
+    .linkText { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 19px; fill: #000000; letter-spacing: 0; }
   </style>
 
-  <rect width="1200" height="900" fill="#ffffff"/>
+  <rect width="1100" height="735" fill="#ffffff"/>
 
-  <rect x="335" y="22" width="530" height="70" class="box"/>
-  <text x="600" y="66" text-anchor="middle" class="titleText">面向轻量级图像超分辨率的 CAPANet 研究</text>
+  <rect x="250" y="24" width="700" height="70" class="box"/>
+  <text x="600" y="68" text-anchor="middle" class="titleText">面向轻量级图像超分辨率的 CAPANet 研究内容</text>
 
-  <path d="M600 92 L600 122" class="line"/>
-  <path d="M430 122 L770 122" class="line"/>
-  <path d="M430 122 L430 145" class="arrow"/>
-  <path d="M770 122 L770 145" class="arrow"/>
+  <path d="M600 94 L600 126" class="arrow"/>
 
-  <rect x="335" y="150" width="190" height="72" class="box"/>
-  <text x="430" y="196" text-anchor="middle" class="nodeText">关键问题</text>
+  <text x="286" y="142" text-anchor="middle" class="headerText">研究问题</text>
+  <text x="600" y="142" text-anchor="middle" class="headerText">研究目标</text>
+  <text x="936" y="142" text-anchor="middle" class="headerText">研究方法</text>
 
-  <rect x="675" y="150" width="190" height="72" class="box"/>
-  <text x="770" y="196" text-anchor="middle" class="nodeText">研究策略</text>
-
-  <path d="M525 186 L665 186" class="arrow"/>
-
-  <path d="M430 222 L430 256" class="line"/>
-  <path d="M276 256 L540 256" class="line"/>
-  <path d="M276 256 L276 286" class="arrow"/>
-  <path d="M430 256 L430 286" class="arrow"/>
-  <path d="M540 256 L540 286" class="arrow"/>
-
-  <path d="M770 222 L770 256" class="line"/>
-  <path d="M656 256 L924 256" class="line"/>
-  <path d="M656 256 L656 286" class="arrow"/>
-  <path d="M770 256 L770 286" class="arrow"/>
-  <path d="M924 256 L924 286" class="arrow"/>
-
-  <rect x="236" y="292" width="80" height="236" class="box"/>
-  <text x="276" y="340" text-anchor="middle" class="verticalText">
-    <tspan x="276" dy="0">跨区</tspan>
-    <tspan x="276" dy="30">域相</tspan>
-    <tspan x="276" dy="30">似纹</tspan>
-    <tspan x="276" dy="30">理组</tspan>
-    <tspan x="276" dy="30">织不</tspan>
-    <tspan x="276" dy="30">足</tspan>
+  <rect x="28" y="168" width="112" height="116" class="box"/>
+  <text x="84" y="216" text-anchor="middle" class="labelText">
+    <tspan x="84" dy="0">研究内容</tspan>
+    <tspan x="84" dy="30">一</tspan>
+  </text>
+  <rect x="170" y="168" width="232" height="116" class="box"/>
+  <text x="286" y="202" text-anchor="middle" class="bodyText">
+    <tspan x="286" dy="0">跨区域相似纹理</tspan>
+    <tspan x="286" dy="27">组织不足</tspan>
+    <tspan x="286" dy="27">长程依赖利用不足</tspan>
+  </text>
+  <path d="M408 226 L468 226" class="arrow"/>
+  <rect x="478" y="168" width="244" height="116" class="box"/>
+  <text x="600" y="202" text-anchor="middle" class="bodyText">
+    <tspan x="600" dy="0">自适应组织相似</tspan>
+    <tspan x="600" dy="27">token</tspan>
+    <tspan x="600" dy="27">构建候选集合</tspan>
+  </text>
+  <path d="M728 226 L788 226" class="arrow"/>
+  <rect x="798" y="168" width="274" height="116" class="box"/>
+  <text x="936" y="195" text-anchor="middle" class="bodyText">
+    <tspan x="936" dy="0">DPR 动态语义</tspan>
+    <tspan x="936" dy="25">原型路由</tspan>
+    <tspan x="936" dy="25">原型生成、内容排序</tspan>
+    <tspan x="936" dy="25">相似区域聚合</tspan>
   </text>
 
-  <rect x="390" y="292" width="80" height="236" class="box"/>
-  <text x="430" y="340" text-anchor="middle" class="verticalText">
-    <tspan x="430" dy="0">无效</tspan>
-    <tspan x="430" dy="30">注意</tspan>
-    <tspan x="430" dy="30">力连</tspan>
-    <tspan x="430" dy="30">接较</tspan>
-    <tspan x="430" dy="30">多</tspan>
+  <path d="M936 284 L936 318" class="arrow"/>
+  <text x="960" y="306" text-anchor="start" class="linkText">候选集合</text>
+
+  <rect x="28" y="326" width="112" height="116" class="box"/>
+  <text x="84" y="374" text-anchor="middle" class="labelText">
+    <tspan x="84" dy="0">研究内容</tspan>
+    <tspan x="84" dy="30">二</tspan>
+  </text>
+  <rect x="170" y="326" width="232" height="116" class="box"/>
+  <text x="286" y="360" text-anchor="middle" class="bodyText">
+    <tspan x="286" dy="0">注意力冗余</tspan>
+    <tspan x="286" dy="27">无效连接较多</tspan>
+    <tspan x="286" dy="27">计算分配不均</tspan>
+  </text>
+  <path d="M408 384 L468 384" class="arrow"/>
+  <rect x="478" y="326" width="244" height="116" class="box"/>
+  <text x="600" y="360" text-anchor="middle" class="bodyText">
+    <tspan x="600" dy="0">筛选关键连接</tspan>
+    <tspan x="600" dy="27">压缩低价值交互</tspan>
+    <tspan x="600" dy="27">提高计算有效性</tspan>
+  </text>
+  <path d="M728 384 L788 384" class="arrow"/>
+  <rect x="798" y="326" width="274" height="116" class="box"/>
+  <text x="936" y="353" text-anchor="middle" class="bodyText">
+    <tspan x="936" dy="0">PFSA 渐进聚焦</tspan>
+    <tspan x="936" dy="25">稀疏注意力</tspan>
+    <tspan x="936" dy="25">先验继承、焦点率</tspan>
+    <tspan x="936" dy="25">TopK 稀疏交互</tspan>
   </text>
 
-  <rect x="500" y="292" width="80" height="236" class="box"/>
-  <text x="540" y="340" text-anchor="middle" class="verticalText">
-    <tspan x="540" dy="0">层次</tspan>
-    <tspan x="540" dy="30">化细</tspan>
-    <tspan x="540" dy="30">节重</tspan>
-    <tspan x="540" dy="30">建不</tspan>
-    <tspan x="540" dy="30">足</tspan>
+  <path d="M936 442 L936 476" class="arrow"/>
+  <text x="960" y="464" text-anchor="start" class="linkText">有效交互</text>
+
+  <rect x="28" y="484" width="112" height="116" class="box"/>
+  <text x="84" y="532" text-anchor="middle" class="labelText">
+    <tspan x="84" dy="0">研究内容</tspan>
+    <tspan x="84" dy="30">三</tspan>
+  </text>
+  <rect x="170" y="484" width="232" height="116" class="box"/>
+  <text x="286" y="518" text-anchor="middle" class="bodyText">
+    <tspan x="286" dy="0">低中高频重建</tspan>
+    <tspan x="286" dy="27">缺乏协同</tspan>
+    <tspan x="286" dy="27">细节恢复不稳定</tspan>
+  </text>
+  <path d="M408 542 L468 542" class="arrow"/>
+  <rect x="478" y="484" width="244" height="116" class="box"/>
+  <text x="600" y="518" text-anchor="middle" class="bodyText">
+    <tspan x="600" dy="0">低频到高频</tspan>
+    <tspan x="600" dy="27">递进恢复</tspan>
+    <tspan x="600" dy="27">兼顾结构与纹理</tspan>
+  </text>
+  <path d="M728 542 L788 542" class="arrow"/>
+  <rect x="798" y="484" width="274" height="116" class="box"/>
+  <text x="936" y="511" text-anchor="middle" class="bodyText">
+    <tspan x="936" dy="0">LMR 低到高</tspan>
+    <tspan x="936" dy="25">多级协同重建</tspan>
+    <tspan x="936" dy="25">低频结构、中频过渡</tspan>
+    <tspan x="936" dy="25">高频纹理增强</tspan>
   </text>
 
-  <rect x="616" y="292" width="80" height="236" class="box"/>
-  <text x="656" y="337" text-anchor="middle" class="verticalText">
-    <tspan x="656" dy="0">提出</tspan>
-    <tspan x="656" dy="30">DPR</tspan>
-    <tspan x="656" dy="30">内容</tspan>
-    <tspan x="656" dy="30">自适</tspan>
-    <tspan x="656" dy="30">应路</tspan>
-    <tspan x="656" dy="30">由</tspan>
-  </text>
-
-  <rect x="730" y="292" width="80" height="236" class="box"/>
-  <text x="770" y="337" text-anchor="middle" class="verticalText">
-    <tspan x="770" dy="0">提出</tspan>
-    <tspan x="770" dy="30">PFSA</tspan>
-    <tspan x="770" dy="30">渐进</tspan>
-    <tspan x="770" dy="30">聚焦</tspan>
-    <tspan x="770" dy="30">稀疏</tspan>
-    <tspan x="770" dy="30">注意</tspan>
-  </text>
-
-  <rect x="884" y="292" width="80" height="236" class="box"/>
-  <text x="924" y="337" text-anchor="middle" class="verticalText">
-    <tspan x="924" dy="0">提出</tspan>
-    <tspan x="924" dy="30">LMR</tspan>
-    <tspan x="924" dy="30">低到</tspan>
-    <tspan x="924" dy="30">高多</tspan>
-    <tspan x="924" dy="30">级重</tspan>
-    <tspan x="924" dy="30">建</tspan>
-  </text>
-
-  <path d="M430 542 L430 560 L770 560 L770 542" class="line"/>
-  <path d="M600 560 L600 586" class="arrow"/>
-
-  <rect x="505" y="592" width="190" height="72" class="box"/>
-  <text x="600" y="638" text-anchor="middle" class="nodeBold">研究内容</text>
-
-  <path d="M600 664 L600 692" class="line"/>
-  <path d="M172 692 L1028 692" class="line"/>
-  <path d="M172 692 L172 720" class="arrow"/>
-  <path d="M600 692 L600 720" class="arrow"/>
-  <path d="M1028 692 L1028 720" class="arrow"/>
-
-  <rect x="20" y="726" width="305" height="130" class="box"/>
-  <text x="172" y="760" text-anchor="middle" class="bodyText">
-    <tspan x="172" dy="0">针对跨区域相似纹理组织</tspan>
-    <tspan x="172" dy="28">不足的问题，提出动态语义</tspan>
-    <tspan x="172" dy="28">原型路由 DPR</tspan>
-    <tspan x="172" dy="28">（研究内容一）</tspan>
-  </text>
-
-  <rect x="354" y="760" width="60" height="58" fill="#ffffff"/>
-  <text x="384" y="775" text-anchor="middle" class="linkText">
-    <tspan x="384" dy="0">连接</tspan>
-    <tspan x="384" dy="28">筛选</tspan>
-  </text>
-  <path d="M326 792 L350 792" class="line"/>
-  <path d="M418 792 L450 792" class="arrow"/>
-
-  <rect x="450" y="726" width="305" height="130" class="box"/>
-  <text x="600" y="760" text-anchor="middle" class="bodyText">
-    <tspan x="600" dy="0">针对注意力冗余与无效交互</tspan>
-    <tspan x="600" dy="28">问题，提出渐进聚焦稀疏</tspan>
-    <tspan x="600" dy="28">注意力 PFSA</tspan>
-    <tspan x="600" dy="28">（研究内容二）</tspan>
-  </text>
-
-  <rect x="785" y="760" width="60" height="58" fill="#ffffff"/>
-  <text x="815" y="775" text-anchor="middle" class="linkText">
-    <tspan x="815" dy="0">层次</tspan>
-    <tspan x="815" dy="28">重建</tspan>
-  </text>
-  <path d="M756 792 L781 792" class="line"/>
-  <path d="M849 792 L875 792" class="arrow"/>
-
-  <rect x="875" y="726" width="305" height="130" class="box"/>
-  <text x="1028" y="760" text-anchor="middle" class="bodyText">
-    <tspan x="1028" dy="0">针对结构连续性与高频纹理</tspan>
-    <tspan x="1028" dy="28">恢复不足问题，提出低到高</tspan>
-    <tspan x="1028" dy="28">多级协同重建 LMR</tspan>
-    <tspan x="1028" dy="28">（研究内容三）</tspan>
-  </text>
+  <path d="M286 612 L286 640 L936 640 L936 612" class="line"/>
+  <path d="M600 640 L600 668" class="arrow"/>
+  <rect x="370" y="678" width="460" height="50" class="box"/>
+  <text x="600" y="710" text-anchor="middle" class="headerText">轻量级预算下提升超分辨率重建质量</text>
 </svg>

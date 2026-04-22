@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1700 1020" role="img" aria-labelledby="title desc">
   <title id="title">图 4 CAPANet 总体结构图</title>
-  <desc id="desc">CAPANet 总体结构由低分辨率输入、浅层特征提取、多个 CAPANet Block、深层特征融合与重建头组成。每个 CAPANet Block 包含 LayerNorm、DPR 动态语义原型路由、全局中心交互、LMR 与 PFSA 多级聚焦重建、投影、轻量前馈细化和残差输出。</desc>
+  <desc id="desc">CAPANet 总体结构由低分辨率输入、浅层特征提取、多个 CAPANet Block、深层特征融合与重建头组成。每个 CAPANet Block 包含 LayerNorm、DPR 动态语义原型路由、由 prototypes 生成的全局中心弱分支、LMR 与 PFSA 低中高频多级聚焦重建、投影、ConvFFN 前馈细化和残差输出。</desc>
   <defs>
     <linearGradient id="pageBg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#ffffff"/>
@@ -86,7 +86,7 @@
 
     <rect x="596" y="244" width="126" height="86" rx="8" fill="#ffffff" opacity="0.96"/>
     <text x="659" y="275" text-anchor="middle" class="module">Block 1</text>
-    <text x="659" y="302" text-anchor="middle" class="moduleSub">DPR + PFSA + LMR</text>
+    <text x="659" y="302" text-anchor="middle" class="moduleSub">DPR → LMR / PFSA</text>
 
     <rect x="766" y="244" width="126" height="86" rx="8" fill="#ffffff" opacity="0.96"/>
     <text x="829" y="275" text-anchor="middle" class="module">Block 2</text>
@@ -146,37 +146,39 @@
     <rect x="440" y="535" width="165" height="110" rx="8" fill="#ecfeff" stroke="#14b8a6" stroke-width="2"/>
     <text x="522" y="572" text-anchor="middle" class="module">DPR</text>
     <text x="522" y="598" text-anchor="middle" class="moduleSub">动态语义原型路由</text>
-    <text x="522" y="625" text-anchor="middle" class="tiny">prototypes / sorted tokens</text>
+    <text x="522" y="625" text-anchor="middle" class="tiny">sorted tokens / x_scores</text>
 
     <rect x="660" y="512" width="165" height="82" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
-    <text x="742" y="546" text-anchor="middle" class="module">全局中心交互</text>
-    <text x="742" y="572" text-anchor="middle" class="moduleSub">k_global / v_global</text>
+    <text x="742" y="538" text-anchor="middle" class="module">全局中心弱分支</text>
+    <text x="742" y="562" text-anchor="middle" class="moduleSub">prototypes → k / v</text>
+    <text x="742" y="584" text-anchor="middle" class="tiny">η_lf=0, η_mf/hf&gt;0</text>
 
     <rect x="660" y="622" width="300" height="70" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="2"/>
     <text x="810" y="650" text-anchor="middle" class="module">LMR + PFSA</text>
-    <text x="810" y="674" text-anchor="middle" class="moduleSub">低频 → 中频 → 高频渐进聚焦交互</text>
+    <text x="810" y="674" text-anchor="middle" class="moduleSub">低频 → 中频 → 高频渐进聚焦重建</text>
 
     <rect x="1015" y="545" width="135" height="90" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
     <text x="1082" y="581" text-anchor="middle" class="module">Proj</text>
     <text x="1082" y="610" text-anchor="middle" class="moduleSub">Conv1x1</text>
 
     <rect x="1205" y="545" width="135" height="90" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
-    <text x="1272" y="581" text-anchor="middle" class="module">LFR</text>
-    <text x="1272" y="610" text-anchor="middle" class="moduleSub">FFN / ConvFFN</text>
+    <text x="1272" y="581" text-anchor="middle" class="module">ConvFFN</text>
+    <text x="1272" y="610" text-anchor="middle" class="moduleSub">轻量前馈细化</text>
 
     <rect x="1380" y="545" width="64" height="90" rx="8" fill="#f0fdfa" stroke="#0f766e" stroke-width="2"/>
     <text x="1412" y="581" text-anchor="middle" class="module">+</text>
     <text x="1412" y="610" text-anchor="middle" class="moduleSub">残差</text>
 
     <path d="M386 590 L428 590" class="arrowLine"/>
-    <path d="M606 590 L648 590" class="arrowLine"/>
-    <path d="M825 553 C870 553, 918 591, 1003 591" class="arrowLine"/>
+    <path d="M606 586 L648 558" class="softLine"/>
+    <path d="M606 626 C628 626, 636 653, 648 657" class="arrowLine"/>
+    <path d="M742 596 L742 610" class="softLine"/>
     <path d="M960 657 C990 642, 1003 622, 1013 604" class="arrowLine"/>
     <path d="M1152 590 L1193 590" class="arrowLine"/>
     <path d="M1342 590 L1368 590" class="arrowLine"/>
 
     <path d="M522 645 C560 683, 610 690, 650 672" class="softLine"/>
-    <text x="585" y="706" text-anchor="middle" class="tiny">路由索引与内容得分</text>
+    <text x="585" y="706" text-anchor="middle" class="tiny">路由标签、索引与 x_scores</text>
 
     <path d="M810 692 C810 716, 850 716, 850 692" class="softLine"/>
     <text x="912" y="716" text-anchor="middle" class="tiny">attn_state: lf / mf / hf</text>
@@ -188,6 +190,6 @@
   <g filter="url(#shadow)">
     <rect x="514" y="792" width="672" height="106" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
     <text x="850" y="830" text-anchor="middle" class="label">核心信息流</text>
-    <text x="850" y="865" text-anchor="middle" class="small">内容路由 → 关键连接筛选 → 低到高多级交互 → 重建输出</text>
+    <text x="850" y="865" text-anchor="middle" class="small">内容路由 → 全局中心弱分支 → 关键连接筛选 → 低到高多级协同重建 → 重建输出</text>
   </g>
 </svg>
