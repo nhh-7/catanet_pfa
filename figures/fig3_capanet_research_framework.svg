@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="15 12 1070 725" role="img" aria-labelledby="title desc">
   <title id="title">图 3 CAPANet 研究内容框架图</title>
-  <desc id="desc">CAPANet 研究内容框架图。图中按照研究内容一、研究内容二和研究内容三三条横向链路展开，每条链路均由研究问题、研究目标和研究方法组成，并通过候选集合和有效交互体现三项研究内容之间的递进关系。</desc>
+  <desc id="desc">CAPANet 研究内容框架图。图中按照研究内容一、研究内容二和研究内容三三条横向链路展开，每条链路均由研究问题、研究目标和研究方法组成，并通过路由先验和有效交互体现三项研究内容之间的递进关系。</desc>
   <defs>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="5" orient="auto">
       <path d="M0,0 L10,5 L0,10 Z" fill="#000000"/>
@@ -40,28 +40,28 @@
   </text>
   <rect x="170" y="168" width="232" height="116" class="box"/>
   <text x="286" y="202" text-anchor="middle" class="bodyText">
-    <tspan x="286" dy="0">跨区域相似纹理</tspan>
-    <tspan x="286" dy="27">组织不足</tspan>
-    <tspan x="286" dy="27">长程依赖利用不足</tspan>
+    <tspan x="286" dy="0">CATANet 聚合后</tspan>
+    <tspan x="286" dy="27">语义中心刻画不足</tspan>
+    <tspan x="286" dy="27">路由元信息复用不足</tspan>
   </text>
   <path d="M408 226 L468 226" class="arrow"/>
   <rect x="478" y="168" width="244" height="116" class="box"/>
   <text x="600" y="202" text-anchor="middle" class="bodyText">
-    <tspan x="600" dy="0">自适应组织相似</tspan>
-    <tspan x="600" dy="27">token</tspan>
-    <tspan x="600" dy="27">构建候选集合</tspan>
+    <tspan x="600" dy="0">生成动态语义原型</tspan>
+    <tspan x="600" dy="27">刻画 token 归属</tspan>
+    <tspan x="600" dy="27">支撑后续协同重建</tspan>
   </text>
   <path d="M728 226 L788 226" class="arrow"/>
   <rect x="798" y="168" width="274" height="116" class="box"/>
   <text x="936" y="195" text-anchor="middle" class="bodyText">
     <tspan x="936" dy="0">DPR 动态语义</tspan>
     <tspan x="936" dy="25">原型路由</tspan>
-    <tspan x="936" dy="25">原型生成、内容排序</tspan>
-    <tspan x="936" dy="25">相似区域聚合</tspan>
+    <tspan x="936" dy="25">原型生成、置信路由</tspan>
+    <tspan x="936" dy="25">路由元信息复用</tspan>
   </text>
 
   <path d="M936 284 L936 318" class="arrow"/>
-  <text x="960" y="306" text-anchor="start" class="linkText">候选集合</text>
+  <text x="960" y="306" text-anchor="start" class="linkText">路由先验</text>
 
   <rect x="28" y="326" width="112" height="116" class="box"/>
   <text x="84" y="374" text-anchor="middle" class="labelText">

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 470" role="img" aria-labelledby="title desc">
   <title id="title">图 2 轻量级图像超分辨率技术发展脉络图</title>
-  <desc id="desc">单轴时间线形式的轻量级图像超分辨率技术发展脉络图。图中沿年份列出 SRCNN、EDSR、RCAN、ViT、SwinIR、ELAN、HAT、DAT、CRAFT、NGswin、Omni-SR、SPIN、ATD、IPG、CFAT、PCSR、MTKD、UCIP、AdaBM、CATANet、PFT、AutoLUT、PTQ、ConvAttn 和 IM-LUT 等代表方法或相关基础模型，体现从深度卷积基础到 Transformer、高效聚合、内容自适应与部署友好推理的发展趋势。</desc>
+  <desc id="desc">单轴时间线形式的轻量级图像超分辨率技术发展脉络图。图中沿年份列出 SRCNN、EDSR、RCAN、ViT、SwinIR、ELAN、HAT、DAT、CRAFT、NGswin、Omni-SR、SPIN、ATD、IPG、CFAT、PCSR、MTKD、UCIP、AdaBM、CATANet、AutoLUT、PTQ、ConvAttn 和 IM-LUT 等代表方法或相关基础模型，体现从深度卷积基础到 Transformer、高效聚合、内容自适应与部署友好推理的发展趋势。</desc>
   <style>
     .axis { stroke: #6f8fa8; stroke-width: 13; stroke-linecap: square; }
     .base { stroke: #d8d8d8; stroke-width: 5; stroke-linecap: square; }
@@ -107,7 +107,7 @@
     <text x="1293" y="377" class="year">2025</text>
     <rect x="1218" y="28" width="210" height="106" rx="5" class="methodBox"/>
     <text x="1323" y="51" text-anchor="middle" class="method">
-      <tspan x="1323" dy="0">CATANet / PFT</tspan>
+      <tspan x="1323" dy="0">CATANet</tspan>
       <tspan x="1323" dy="23">AutoLUT / PTQ</tspan>
       <tspan x="1323" dy="23">ConvAttn</tspan>
       <tspan x="1323" dy="23">IM-LUT</tspan>
