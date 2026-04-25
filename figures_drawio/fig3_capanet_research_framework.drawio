@@ -1,0 +1,104 @@
+<mxfile host="Electron" agent="ChatGPT">
+  <diagram name="CAPANet研究内容框架" id="0">
+    <mxGraphModel dx="1118" dy="744" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="750" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=20;fontStyle=1;" value="面向轻量级图像超分辨率的 CAPANet 研究内容" vertex="1">
+          <mxGeometry height="70" width="700" x="230" y="23" as="geometry" />
+        </mxCell>
+        <mxCell id="h_problem" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=16;fontStyle=1;" value="研究问题" vertex="1">
+          <mxGeometry height="40" width="69" x="231.5" y="117" as="geometry" />
+        </mxCell>
+        <mxCell id="h_goal" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=16;fontStyle=1;" value="研究目标" vertex="1">
+          <mxGeometry height="40" width="72" x="544" y="117" as="geometry" />
+        </mxCell>
+        <mxCell id="h_method" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=16;fontStyle=1;" value="研究方法" vertex="1">
+          <mxGeometry height="40" width="72" x="879" y="117" as="geometry" />
+        </mxCell>
+        <mxCell id="p1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=14;" value="CATANet 聚合后&#xa;语义中心刻画不足&#xa;路由元信息复用不足" vertex="1">
+          <mxGeometry height="116" width="232" x="150" y="167" as="geometry" />
+        </mxCell>
+        <mxCell id="g1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=14;" value="生成动态语义原型&#xa;刻画 token 归属&#xa;支撑后续协同重建" vertex="1">
+          <mxGeometry height="116" width="244" x="458" y="167" as="geometry" />
+        </mxCell>
+        <mxCell id="m1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=14;" value="DPR 动态语义&#xa;原型路由&#xa;原型生成、置信路由&#xa;路由元信息复用" vertex="1">
+          <mxGeometry height="116" width="274" x="778" y="167" as="geometry" />
+        </mxCell>
+        <mxCell id="e_p_g_1" edge="1" parent="1" source="p1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=2;" target="g1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_g_m_1" edge="1" parent="1" source="g1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=2;" target="m1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=14;" value="注意力冗余&#xa;无效连接较多&#xa;计算分配不均" vertex="1">
+          <mxGeometry height="116" width="232" x="150" y="325" as="geometry" />
+        </mxCell>
+        <mxCell id="g2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=14;" value="筛选关键连接&#xa;压缩低价值交互&#xa;提高计算有效性" vertex="1">
+          <mxGeometry height="116" width="244" x="458" y="325" as="geometry" />
+        </mxCell>
+        <mxCell id="m2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=14;" value="PFSA 渐进聚焦&#xa;稀疏注意力&#xa;先验继承、焦点率&#xa;TopK 稀疏交互" vertex="1">
+          <mxGeometry height="116" width="274" x="778" y="325" as="geometry" />
+        </mxCell>
+        <mxCell id="e_p_g_2" edge="1" parent="1" source="p2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=2;" target="g2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_g_m_2" edge="1" parent="1" source="g2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=2;" target="m2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=14;" value="低中高频重建&#xa;缺乏协同&#xa;细节恢复不稳定" vertex="1">
+          <mxGeometry height="116" width="232" x="150" y="483" as="geometry" />
+        </mxCell>
+        <mxCell id="g3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=14;" value="低频到高频&#xa;递进恢复&#xa;兼顾结构与纹理" vertex="1">
+          <mxGeometry height="116" width="244" x="458" y="483" as="geometry" />
+        </mxCell>
+        <mxCell id="m3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=14;" value="LMR 低到高&#xa;多级协同重建&#xa;低频结构、中频过渡&#xa;高频纹理增强" vertex="1">
+          <mxGeometry height="116" width="274" x="778" y="483" as="geometry" />
+        </mxCell>
+        <mxCell id="e_p_g_3" edge="1" parent="1" source="p3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=2;" target="g3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_g_m_3" edge="1" parent="1" source="g3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=2;" target="m3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_m1_m2" edge="1" parent="1" source="m1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;dashed=1;strokeColor=#666666;" target="m2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="note_route" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=13;fontStyle=1;fontColor=#666666;" value="路由先验" vertex="1">
+          <mxGeometry height="24" width="110" x="930" y="291" as="geometry" />
+        </mxCell>
+        <mxCell id="e_m2_m3" edge="1" parent="1" source="m2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;dashed=1;strokeColor=#666666;" target="m3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="note_interact" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=13;fontStyle=1;fontColor=#666666;" value="有效交互" vertex="1">
+          <mxGeometry height="24" width="110" x="930" y="449" as="geometry" />
+        </mxCell>
+        <mxCell id="result" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=16;fontStyle=1;" value="轻量级预算下提升超分辨率重建质量" vertex="1">
+          <mxGeometry height="50" width="460" x="350" y="677" as="geometry" />
+        </mxCell>
+        <mxCell id="TcNYpBGQT4s4Fm7cf8RE-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;span style=&quot;font-size: 15px; font-weight: 700;&quot;&gt;研究内容&lt;/span&gt;&lt;span style=&quot;font-size: 15px; font-weight: 700;&quot;&gt;二&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="40" y="368" as="geometry" />
+        </mxCell>
+        <mxCell id="TcNYpBGQT4s4Fm7cf8RE-4" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;span style=&quot;font-size: 15px; font-weight: 700;&quot;&gt;研究内容&lt;/span&gt;&lt;span style=&quot;font-size: 15px;&quot;&gt;&lt;b&gt;三&lt;/b&gt;&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="40" y="526" as="geometry" />
+        </mxCell>
+        <mxCell id="TcNYpBGQT4s4Fm7cf8RE-5" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;span style=&quot;font-size: 15px; font-weight: 700;&quot;&gt;研究内容一&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="40" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="TcNYpBGQT4s4Fm7cf8RE-8" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;dashed=1;strokeColor=#666666;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="result" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="914" y="641" />
+              <mxPoint x="580" y="641" />
+            </Array>
+            <mxPoint x="914.44" y="599" as="sourcePoint" />
+            <mxPoint x="600" y="641" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TcNYpBGQT4s4Fm7cf8RE-12" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=13;fontStyle=1;fontColor=#666666;" value="最终目标" vertex="1">
+          <mxGeometry height="24" width="60" x="680" y="639" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

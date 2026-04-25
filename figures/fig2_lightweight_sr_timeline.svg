@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 470" role="img" aria-labelledby="title desc">
-  <title id="title">图 2 轻量级图像超分辨率技术发展脉络图</title>
-  <desc id="desc">单轴时间线形式的轻量级图像超分辨率技术发展脉络图。图中沿年份列出 SRCNN、EDSR、RCAN、ViT、SwinIR、ELAN、HAT、DAT、CRAFT、NGswin、Omni-SR、SPIN、ATD、IPG、CFAT、PCSR、MTKD、UCIP、AdaBM、CATANet、AutoLUT、PTQ、ConvAttn 和 IM-LUT 等代表方法或相关基础模型，体现从深度卷积基础到 Transformer、高效聚合、内容自适应与部署友好推理的发展趋势。</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1700 560" role="img" aria-labelledby="title desc">
+  <title id="title">图 2 图像超分辨率技术发展脉络图</title>
+  <desc id="desc">单轴时间线形式的图像超分辨率技术发展脉络图。图中按年份列出研究现状中提及的代表模型与网络名称，包括 SRCNN、EDSR、Transformer、RCAN、ViT、SwinIR、ELAN、HAT、DAT、CRAFT、NGswin、Omni-SR、SPIN、CFSR、HiT-SR、ATD、IPG、CFAT、PCSR、MTKD、UCIP、AdaBM、CATANet、SPCT、AutoLUT、IM-LUT、DiT4SR、DTWSR、High-Frequency Mamba、SAT、PFANet、PII-SR、Spatial-Frequency Fusion Tiny-Transformer、Shifted Pooling Cross-Aggregation、AlignVAR 和 FiDeSR。</desc>
   <style>
     .axis { stroke: #6f8fa8; stroke-width: 13; stroke-linecap: square; }
     .base { stroke: #d8d8d8; stroke-width: 5; stroke-linecap: square; }
@@ -8,109 +8,128 @@
     .tick { stroke: #9a9a9a; stroke-width: 3; }
     .dot { fill: #5f5f5f; }
     .yearDot { fill: #0f78a8; }
-    .method { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 18px; fill: #111111; letter-spacing: 0; }
+    .method { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 17px; fill: #111111; letter-spacing: 0; }
     .year { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 26px; fill: #555555; letter-spacing: 0; }
     .methodBox { fill: #ffffff; stroke: #bdbdbd; stroke-width: 1.6; }
   </style>
 
-  <rect width="1500" height="470" fill="#ffffff"/>
+  <rect width="1700" height="560" fill="#ffffff"/>
 
-  <line x1="80" y1="325" x2="1440" y2="325" class="base"/>
-  <line x1="82" y1="190" x2="1428" y2="190" class="axis"/>
+  <line x1="70" y1="390" x2="1630" y2="390" class="base"/>
+  <line x1="72" y1="255" x2="1618" y2="255" class="axis"/>
 
   <g>
-    <line x1="110" y1="144" x2="110" y2="325" class="guide"/>
-    <line x1="110" y1="140" x2="110" y2="184" class="tick"/>
-    <circle cx="110" cy="195" r="5" class="dot"/>
-    <circle cx="110" cy="325" r="14" class="yearDot"/>
-    <text x="83" y="377" class="year">2014</text>
-    <text x="110" y="82" text-anchor="middle" class="method">SRCNN</text>
+    <line x1="105" y1="204" x2="105" y2="390" class="guide"/>
+    <line x1="105" y1="200" x2="105" y2="249" class="tick"/>
+    <circle cx="105" cy="260" r="5" class="dot"/>
+    <circle cx="105" cy="390" r="14" class="yearDot"/>
+    <text x="75" y="442" class="year">2014</text>
+    <text x="105" y="120" text-anchor="middle" class="method">SRCNN</text>
   </g>
 
   <g>
-    <line x1="265" y1="144" x2="265" y2="325" class="guide"/>
-    <line x1="265" y1="140" x2="265" y2="184" class="tick"/>
-    <circle cx="265" cy="195" r="5" class="dot"/>
-    <circle cx="265" cy="325" r="14" class="yearDot"/>
-    <text x="238" y="377" class="year">2017</text>
-    <text x="265" y="82" text-anchor="middle" class="method">EDSR</text>
-  </g>
-
-  <g>
-    <line x1="400" y1="144" x2="400" y2="325" class="guide"/>
-    <line x1="400" y1="140" x2="400" y2="184" class="tick"/>
-    <circle cx="400" cy="195" r="5" class="dot"/>
-    <circle cx="400" cy="325" r="14" class="yearDot"/>
-    <text x="373" y="377" class="year">2018</text>
-    <text x="400" y="82" text-anchor="middle" class="method">RCAN</text>
-  </g>
-
-  <g>
-    <line x1="492" y1="144" x2="492" y2="190" class="guide"/>
-    <line x1="492" y1="140" x2="492" y2="184" class="tick"/>
-    <circle cx="492" cy="195" r="5" class="dot"/>
-    <text x="492" y="82" text-anchor="middle" class="method">ViT</text>
-  </g>
-
-  <g>
-    <line x1="555" y1="144" x2="555" y2="325" class="guide"/>
-    <line x1="555" y1="140" x2="555" y2="184" class="tick"/>
-    <circle cx="555" cy="195" r="5" class="dot"/>
-    <circle cx="555" cy="325" r="14" class="yearDot"/>
-    <text x="528" y="377" class="year">2021</text>
-    <text x="555" y="82" text-anchor="middle" class="method">SwinIR</text>
-  </g>
-
-  <g>
-    <line x1="700" y1="144" x2="700" y2="325" class="guide"/>
-    <line x1="700" y1="140" x2="700" y2="184" class="tick"/>
-    <circle cx="700" cy="195" r="5" class="dot"/>
-    <circle cx="700" cy="325" r="14" class="yearDot"/>
-    <text x="673" y="377" class="year">2022</text>
-    <text x="700" y="82" text-anchor="middle" class="method">ELAN</text>
-  </g>
-
-  <g>
-    <line x1="865" y1="132" x2="865" y2="325" class="guide"/>
-    <line x1="865" y1="128" x2="865" y2="184" class="tick"/>
-    <circle cx="865" cy="195" r="5" class="dot"/>
-    <circle cx="865" cy="325" r="14" class="yearDot"/>
-    <text x="838" y="377" class="year">2023</text>
-    <rect x="765" y="38" width="200" height="84" rx="5" class="methodBox"/>
-    <text x="865" y="61" text-anchor="middle" class="method">
-      <tspan x="865" dy="0">HAT / DAT / CRAFT</tspan>
-      <tspan x="865" dy="23">NGswin</tspan>
-      <tspan x="865" dy="23">Omni-SR / SPIN</tspan>
+    <line x1="255" y1="142" x2="255" y2="390" class="guide"/>
+    <line x1="255" y1="188" x2="255" y2="249" class="tick"/>
+    <circle cx="255" cy="260" r="5" class="dot"/>
+    <circle cx="255" cy="390" r="14" class="yearDot"/>
+    <text x="225" y="442" class="year">2017</text>
+    <rect x="190" y="62" width="130" height="76" rx="5" class="methodBox"/>
+    <text x="255" y="92" text-anchor="middle" class="method">
+      <tspan x="255" dy="0">EDSR</tspan>
+      <tspan x="255" dy="24">Transformer</tspan>
     </text>
   </g>
 
   <g>
-    <line x1="1088" y1="120" x2="1088" y2="325" class="guide"/>
-    <line x1="1088" y1="116" x2="1088" y2="184" class="tick"/>
-    <circle cx="1088" cy="195" r="5" class="dot"/>
-    <circle cx="1088" cy="325" r="14" class="yearDot"/>
-    <text x="1061" y="377" class="year">2024</text>
-    <rect x="985" y="28" width="210" height="106" rx="5" class="methodBox"/>
-    <text x="1090" y="51" text-anchor="middle" class="method">
-      <tspan x="1090" dy="0">ATD / IPG / CFAT</tspan>
-      <tspan x="1090" dy="23">PCSR / MTKD</tspan>
-      <tspan x="1090" dy="23">UCIP</tspan>
-      <tspan x="1090" dy="23">AdaBM</tspan>
+    <line x1="395" y1="204" x2="395" y2="390" class="guide"/>
+    <line x1="395" y1="200" x2="395" y2="249" class="tick"/>
+    <circle cx="395" cy="260" r="5" class="dot"/>
+    <circle cx="395" cy="390" r="14" class="yearDot"/>
+    <text x="365" y="442" class="year">2018</text>
+    <text x="395" y="120" text-anchor="middle" class="method">RCAN</text>
+  </g>
+
+  <g>
+    <line x1="560" y1="142" x2="560" y2="390" class="guide"/>
+    <line x1="560" y1="188" x2="560" y2="249" class="tick"/>
+    <circle cx="560" cy="260" r="5" class="dot"/>
+    <circle cx="560" cy="390" r="14" class="yearDot"/>
+    <text x="530" y="442" class="year">2021</text>
+    <rect x="485" y="62" width="150" height="76" rx="5" class="methodBox"/>
+    <text x="560" y="92" text-anchor="middle" class="method">
+      <tspan x="560" dy="0">ViT</tspan>
+      <tspan x="560" dy="24">SwinIR</tspan>
     </text>
   </g>
 
   <g>
-    <line x1="1320" y1="120" x2="1320" y2="325" class="guide"/>
-    <line x1="1320" y1="116" x2="1320" y2="184" class="tick"/>
-    <circle cx="1320" cy="195" r="5" class="dot"/>
-    <circle cx="1320" cy="325" r="14" class="yearDot"/>
-    <text x="1293" y="377" class="year">2025</text>
-    <rect x="1218" y="28" width="210" height="106" rx="5" class="methodBox"/>
-    <text x="1323" y="51" text-anchor="middle" class="method">
-      <tspan x="1323" dy="0">CATANet</tspan>
-      <tspan x="1323" dy="23">AutoLUT / PTQ</tspan>
-      <tspan x="1323" dy="23">ConvAttn</tspan>
-      <tspan x="1323" dy="23">IM-LUT</tspan>
+    <line x1="715" y1="204" x2="715" y2="390" class="guide"/>
+    <line x1="715" y1="200" x2="715" y2="249" class="tick"/>
+    <circle cx="715" cy="260" r="5" class="dot"/>
+    <circle cx="715" cy="390" r="14" class="yearDot"/>
+    <text x="685" y="442" class="year">2022</text>
+    <text x="715" y="120" text-anchor="middle" class="method">ELAN</text>
+  </g>
+
+  <g>
+    <line x1="900" y1="156" x2="900" y2="390" class="guide"/>
+    <line x1="900" y1="174" x2="900" y2="249" class="tick"/>
+    <circle cx="900" cy="260" r="5" class="dot"/>
+    <circle cx="900" cy="390" r="14" class="yearDot"/>
+    <text x="870" y="442" class="year">2023</text>
+    <rect x="790" y="36" width="220" height="116" rx="5" class="methodBox"/>
+    <text x="900" y="66" text-anchor="middle" class="method">
+      <tspan x="900" dy="0">HAT / DAT / CRAFT</tspan>
+      <tspan x="900" dy="24">NGswin / Omni-SR</tspan>
+      <tspan x="900" dy="24">SPIN</tspan>
+    </text>
+  </g>
+
+  <g>
+    <line x1="1115" y1="242" x2="1115" y2="390" class="guide"/>
+    <line x1="1115" y1="182" x2="1115" y2="249" class="tick"/>
+    <circle cx="1115" cy="260" r="5" class="dot"/>
+    <circle cx="1115" cy="390" r="14" class="yearDot"/>
+    <text x="1085" y="442" class="year">2024</text>
+    <rect x="995" y="110" width="240" height="128" rx="5" class="methodBox"/>
+    <text x="1115" y="140" text-anchor="middle" class="method">
+      <tspan x="1115" dy="0">CFSR / HiT-SR</tspan>
+      <tspan x="1115" dy="24">ATD / IPG / CFAT</tspan>
+      <tspan x="1115" dy="24">PCSR / MTKD / UCIP</tspan>
+      <tspan x="1115" dy="24">AdaBM</tspan>
+    </text>
+  </g>
+
+  <g>
+    <line x1="1325" y1="156" x2="1325" y2="390" class="guide"/>
+    <line x1="1325" y1="174" x2="1325" y2="249" class="tick"/>
+    <circle cx="1325" cy="260" r="5" class="dot"/>
+    <circle cx="1325" cy="390" r="14" class="yearDot"/>
+    <text x="1295" y="442" class="year">2025</text>
+    <rect x="1205" y="24" width="250" height="140" rx="5" class="methodBox"/>
+    <text x="1325" y="66" text-anchor="middle" class="method">
+      <tspan x="1325" dy="0">CATANet / SPCT</tspan>
+      <tspan x="1325" dy="24">AutoLUT / IM-LUT</tspan>
+      <tspan x="1325" dy="24">DiT4SR / DTWSR</tspan>
+      <tspan x="1325" dy="24">High-Frequency Mamba</tspan>
+    </text>
+  </g>
+
+  <g>
+    <line x1="1570" y1="286" x2="1570" y2="390" class="guide"/>
+    <line x1="1570" y1="182" x2="1570" y2="249" class="tick"/>
+    <circle cx="1570" cy="260" r="5" class="dot"/>
+    <circle cx="1570" cy="390" r="14" class="yearDot"/>
+    <text x="1540" y="442" class="year">2026</text>
+    <rect x="1435" y="92" width="250" height="196" rx="5" class="methodBox"/>
+    <text x="1560" y="122" text-anchor="middle" class="method">
+      <tspan x="1560" dy="0">SAT / PFANet</tspan>
+      <tspan x="1560" dy="24">PII-SR</tspan>
+      <tspan x="1560" dy="24">Spatial-Frequency</tspan>
+      <tspan x="1560" dy="24">Fusion Tiny-Transformer</tspan>
+      <tspan x="1560" dy="24">Shifted Pooling</tspan>
+      <tspan x="1560" dy="24">Cross-Aggregation</tspan>
+      <tspan x="1560" dy="24">AlignVAR / FiDeSR</tspan>
     </text>
   </g>
 </svg>
