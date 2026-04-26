@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 760" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1438 760" role="img" aria-labelledby="title desc">
   <title id="title">图 1 单幅图像超分辨率任务示意图</title>
   <desc id="desc">单幅图像超分辨率任务从单张低分辨率图像输入出发，经超分辨率重建网络恢复高分辨率图像，并以真实高分辨率图像作为训练监督和质量评价参考。</desc>
   <defs>
@@ -48,9 +48,9 @@
     .arrowText { font-family: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Heiti SC", Arial, sans-serif; font-size: 19px; font-weight: 700; fill: #333333; letter-spacing: 0; }
   </style>
 
-  <rect width="1500" height="760" fill="#ffffff"/>
-  <text x="750" y="66" text-anchor="middle" class="title">单幅图像超分辨率任务流程</text>
-  <text x="750" y="102" text-anchor="middle" class="sub">从单张低分辨率图像恢复清晰结构、边缘与纹理细节</text>
+  <rect width="1438" height="760" fill="#ffffff"/>
+  <text x="719" y="66" text-anchor="middle" class="title">单幅图像超分辨率任务流程</text>
+  <text x="719" y="102" text-anchor="middle" class="sub">从单张低分辨率图像恢复清晰结构、边缘与纹理细节</text>
 
   <g filter="url(#shadow)">
     <rect x="64" y="154" width="312" height="408" rx="16" class="panel"/>
@@ -151,21 +151,23 @@
   </g>
 
   <g filter="url(#shadow)">
-    <rect x="502" y="208" width="330" height="250" rx="18" fill="url(#modelBg)" stroke="#9fb3aa" stroke-width="2.5"/>
-    <text x="667" y="254" text-anchor="middle" class="label">SISR 重建网络</text>
+    <rect x="502" y="196" width="330" height="316" rx="18" fill="url(#modelBg)" stroke="#9fb3aa" stroke-width="2.5"/>
+    <text x="667" y="244" text-anchor="middle" class="label">SISR 重建网络</text>
     <text x="667" y="286" text-anchor="middle" class="math">SR = fθ(LR)</text>
-    <rect x="545" y="316" width="245" height="38" rx="8" class="module"/>
-    <text x="667" y="341" text-anchor="middle" class="small">特征提取与表示学习</text>
-    <rect x="545" y="365" width="245" height="38" rx="8" class="module"/>
-    <text x="667" y="390" text-anchor="middle" class="small">非线性细节重建</text>
-    <rect x="545" y="414" width="245" height="38" rx="8" class="module"/>
-    <text x="667" y="439" text-anchor="middle" class="small">上采样 ×2 / ×3 / ×4</text>
+    <rect x="545" y="316" width="245" height="36" rx="8" class="module"/>
+    <text x="667" y="340" text-anchor="middle" class="small">浅层特征提取</text>
+    <rect x="545" y="362" width="245" height="36" rx="8" class="module"/>
+    <text x="667" y="386" text-anchor="middle" class="small">深层非线性特征映射</text>
+    <rect x="545" y="408" width="245" height="36" rx="8" class="module"/>
+    <text x="667" y="432" text-anchor="middle" class="small">上下文交互与细节重建</text>
+    <rect x="545" y="454" width="245" height="36" rx="8" class="module"/>
+    <text x="667" y="478" text-anchor="middle" class="small">上采样与图像恢复 ×2 / ×3 / ×4</text>
   </g>
 
-  <path d="M386 350 C424 350, 452 350, 490 350" fill="none" stroke="#333333" stroke-width="4" marker-end="url(#arrow)"/>
-  <text x="438" y="328" text-anchor="middle" class="arrowText">输入</text>
-  <path d="M845 350 C892 350, 924 350, 970 350" fill="none" stroke="#333333" stroke-width="4" marker-end="url(#arrow)"/>
-  <text x="908" y="328" text-anchor="middle" class="arrowText">重建放大</text>
+  <path d="M388 350 C426 350, 456 350, 496 350" fill="none" stroke="#333333" stroke-width="4" marker-end="url(#arrow)"/>
+  <text x="442" y="324" text-anchor="middle" class="arrowText">输入</text>
+  <path d="M838 350 C882 350, 914 350, 958 350" fill="none" stroke="#333333" stroke-width="4" marker-end="url(#arrow)"/>
+  <text x="898" y="324" text-anchor="middle" class="arrowText">超分辨率重建</text>
 
   <g filter="url(#shadow)">
     <rect x="966" y="116" width="408" height="462" rx="18" fill="#ffffff" stroke="url(#srBorder)" stroke-width="3"/>

@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="ChatGPT">
   <diagram name="图2-轻量化SR发展时间线" id="0">
-    <mxGraphModel dx="1341" dy="893" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="540" math="0" shadow="0">
+    <mxGraphModel dx="1548" dy="1031" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="540" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -30,9 +30,6 @@
         </mxCell>
         <mxCell id="E05lhvtI7IofzwL2Ci84-7" parent="1" style="endArrow=none;html=1;rounded=0;strokeColor=#d4d4d4;dashed=1;dashPattern=7 6;strokeWidth=2;" vertex="1">
           <mxGeometry height="120" width="2" x="1157.5" y="260" as="geometry" />
-        </mxCell>
-        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1;fontFamily=Microsoft YaHei;" value="图像超分辨率技术发展脉络图" vertex="1">
-          <mxGeometry height="40" width="760" x="420" y="15" as="geometry" />
         </mxCell>
         <mxCell id="base" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d8d8d8;strokeColor=none;" vertex="1">
           <mxGeometry height="5" width="1460" x="70" y="390" as="geometry" />
