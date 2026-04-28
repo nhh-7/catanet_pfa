@@ -94,7 +94,7 @@
         <mxCell id="t36" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=18.0;fontStyle=1;fontColor=#111111;align=center;verticalAlign=middle;" value="Block 1" vertex="1">
           <mxGeometry height="32.4" width="113.4" x="572.3" y="1285.3999999999999" as="geometry" />
         </mxCell>
-        <mxCell id="t37" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=13.0;fontStyle=0;fontColor=#4a4a4a;align=center;verticalAlign=middle;" value="DPR → LMR（PFSA）" vertex="1">
+        <mxCell id="t37" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=13.0;fontStyle=0;fontColor=#4a4a4a;align=center;verticalAlign=middle;" value="路由 → 聚焦 → 递进重建" vertex="1">
           <mxGeometry height="23.400000000000002" width="175.5" x="541.25" y="1318.1499999999999" as="geometry" />
         </mxCell>
         <mxCell id="t38" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=18.0;fontStyle=1;fontColor=#111111;align=center;verticalAlign=middle;" value="Block 2" vertex="1">
@@ -145,19 +145,19 @@
         <mxCell id="t55" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=13.0;fontStyle=0;fontColor=#4a4a4a;align=center;verticalAlign=middle;" value="动态语义原型路由" vertex="1">
           <mxGeometry height="23.4" width="110" x="437" y="1614.8000000000002" as="geometry" />
         </mxCell>
-        <mxCell id="t56" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=13.0;fontStyle=0;fontColor=#555555;align=center;verticalAlign=middle;" value="sorted tokens / x_scores" vertex="1">
+        <mxCell id="t56" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=13.0;fontStyle=0;fontColor=#555555;align=center;verticalAlign=middle;" value="内容路由结果与归属置信度" vertex="1">
           <mxGeometry height="23.400000000000002" width="280.8" x="351.6" y="1641.1499999999996" as="geometry" />
         </mxCell>
-        <mxCell id="t57" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=18.0;fontStyle=1;fontColor=#111111;align=center;verticalAlign=middle;" value="全局中心弱分支" vertex="1">
+        <mxCell id="t57" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=18.0;fontStyle=1;fontColor=#111111;align=center;verticalAlign=middle;" value="全局原型辅助分支" vertex="1">
           <mxGeometry height="32.4" width="130" x="647.5" y="1545.75" as="geometry" />
         </mxCell>
-        <mxCell id="t58" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=13.0;fontStyle=0;fontColor=#4a4a4a;align=center;verticalAlign=middle;" value="prototypes → k / v" vertex="1">
+        <mxCell id="t58" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=13.0;fontStyle=0;fontColor=#4a4a4a;align=center;verticalAlign=middle;" value="动态原型提供全局先验" vertex="1">
           <mxGeometry height="23.400000000000002" width="210.6" x="606.7" y="1578.1499999999996" as="geometry" />
         </mxCell>
-        <mxCell id="t59" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=13.0;fontStyle=0;fontColor=#555555;align=center;verticalAlign=middle;" value="η_lf=0, η_mf/hf&gt;0" vertex="1">
+        <mxCell id="t59" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=13.0;fontStyle=0;fontColor=#555555;align=center;verticalAlign=middle;" value="低频弱接入，中高频增强" vertex="1">
           <mxGeometry height="23.400000000000002" width="198.9" x="612.55" y="1600.1499999999996" as="geometry" />
         </mxCell>
-        <mxCell id="t60" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=18.0;fontStyle=1;fontColor=#111111;align=center;verticalAlign=middle;" value="LMR（内含 PFSA）" vertex="1">
+        <mxCell id="t60" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=18.0;fontStyle=1;fontColor=#111111;align=center;verticalAlign=middle;" value="LMR + PFSA" vertex="1">
           <mxGeometry height="32.4" width="194.4" x="682.8" y="1660.3999999999996" as="geometry" />
         </mxCell>
         <mxCell id="t61" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=13.0;fontStyle=0;fontColor=#4a4a4a;align=center;verticalAlign=middle;" value="低频 → 中频 → 高频递进交互与重建" vertex="1">
@@ -166,7 +166,7 @@
         <mxCell id="t62" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=18.0;fontStyle=1;fontColor=#111111;align=center;verticalAlign=middle;" value="原顺序恢复" vertex="1">
           <mxGeometry height="32.4" width="100" x="970" y="1588.4" as="geometry" />
         </mxCell>
-        <mxCell id="t63" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=13.0;fontStyle=0;fontColor=#4a4a4a;align=center;verticalAlign=middle;" value="idx_last" vertex="1">
+        <mxCell id="t63" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=13.0;fontStyle=0;fontColor=#4a4a4a;align=center;verticalAlign=middle;" value="恢复原始空间顺序" vertex="1">
           <mxGeometry height="23.400000000000002" width="93.60000000000001" x="973.2" y="1624.1499999999996" as="geometry" />
         </mxCell>
         <mxCell id="t64" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=18.0;fontStyle=1;fontColor=#111111;align=center;verticalAlign=middle;" value="Proj" vertex="1">
@@ -187,7 +187,7 @@
         <mxCell id="t69" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=13.0;fontStyle=0;fontColor=#4a4a4a;align=center;verticalAlign=middle;" value="残差" vertex="1">
           <mxGeometry height="23.400000000000002" width="80" x="1374" y="1626.1499999999996" as="geometry" />
         </mxCell>
-        <mxCell id="t70" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=13.0;fontStyle=0;fontColor=#555555;align=center;verticalAlign=middle;" value="路由标签与 x_scores" vertex="1">
+        <mxCell id="t70" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=13.0;fontStyle=0;fontColor=#555555;align=center;verticalAlign=middle;" value="路由标签与内容纯度估计" vertex="1">
           <mxGeometry height="23.400000000000002" width="163.8" x="481.1" y="1726.1499999999996" as="geometry" />
         </mxCell>
         <mxCell id="t72" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=13.0;fontStyle=0;fontColor=#555555;align=center;verticalAlign=middle;" value="Block 内残差连接" vertex="1">
@@ -196,7 +196,7 @@
         <mxCell id="t73" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=21.0;fontStyle=1;fontColor=#111111;align=center;verticalAlign=middle;" value="核心信息流" vertex="1">
           <mxGeometry height="37.8" width="120" x="760" y="1898.7" as="geometry" />
         </mxCell>
-        <mxCell id="t74" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=15.0;fontStyle=0;fontColor=#4d4d4d;align=center;verticalAlign=middle;" value="内容路由 → 关键连接筛选与全局中心补充 → 低到高多级协同重建 → 原顺序恢复与特征更新 → 重建输出" vertex="1">
+        <mxCell id="t74" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;fontSize=15.0;fontStyle=0;fontColor=#4d4d4d;align=center;verticalAlign=middle;" value="内容路由 → 渐进聚焦与全局原型辅助 → 低到高多级协同重建 → 原顺序恢复与特征更新 → 重建输出" vertex="1">
           <mxGeometry height="27" width="700" x="470" y="1940.6" as="geometry" />
         </mxCell>
         <mxCell id="p83" edge="1" parent="1" style="endArrow=classic;html=1;rounded=1;curved=1;strokeColor=#6a6a6a;strokeWidth=2.2;fillColor=none;endFill=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="r10" value="">

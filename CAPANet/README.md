@@ -21,6 +21,8 @@ The original CATANet paper and code remain the upstream reference:
 - :white_check_mark: 2025-02-28: Our CATANet was accepted by CVPR2025!:tada::tada::tada:
 
 > CAPANet note: the current architecture is no longer a direct reproduction of upstream CATANet. The registered network type for new experiments is `CAPANet`; `CATANet` remains as a compatibility alias around the same implementation.
+> Primary project files now live in `basicsr/archs/capanet_arch.py` and `basicsr/models/capanet_model.py`; the legacy `catanet_*` modules are compatibility shims only.
+> Core ablation knobs are exposed directly in the YAML configs and constructor: `routing_mode`, `focus_mode`, `use_sparse_pfsa`, `level_head_split`, `global_branch_levels`, and `attn_state_mode`.
 
 ⭐If this work is helpful for you, please help star this repo. Thanks!🤗
 
@@ -40,7 +42,7 @@ The original CATANet paper and code remain the upstream reference:
 ### Installation
 ```bash
 pip install -r requirements.txt
-python setup.py develop
+python3 setup.py develop
 ```
 
 
@@ -59,13 +61,13 @@ python setup.py develop
 # training dataset: DIV2K
 
 # ×2 scratch, input size = 64×64,800k iterations
-CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun --standalone --nnodes=1 --nproc_per_node=4 basicsr/train.py -opt options/train/train_CATANet_x2_scratch.yml --launcher pytorch
+CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun --standalone --nnodes=1 --nproc_per_node=4 basicsr/train.py -opt options/train/train_CAPANet_x2_scratch.yml --launcher pytorch
 
 # ×3 finetune, input size = 64×64, 250k iterations
-CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun --standalone --nnodes=1 --nproc_per_node=4 basicsr/train.py -opt options/train/train_CATANet_x3_finetune.yml --launcher pytorch
+CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun --standalone --nnodes=1 --nproc_per_node=4 basicsr/train.py -opt options/train/train_CAPANet_x3_finetune.yml --launcher pytorch
 
 # ×4 finetune, input size = 64×64, 250k iterations
-CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun --standalone --nnodes=1 --nproc_per_node=4 basicsr/train.py -opt options/train/train_CATANet_x4_finetune.yml --launcher pytorch
+CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun --standalone --nnodes=1 --nproc_per_node=4 basicsr/train.py -opt options/train/train_CAPANet_x4_finetune.yml --launcher pytorch
 ```
 
 
@@ -84,9 +86,9 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun --standalone --nnodes=1 --nproc_per_node=4
 
 
 ```bash
-python basicsr/test.py -opt options/test/test_CATANet_x2.yml
-python basicsr/test.py -opt options/test/test_CATANet_x3.yml
-python basicsr/test.py -opt options/test/test_CATANet_x4.yml
+python3 basicsr/test.py -opt options/test/test_CAPANet_x2.yml
+python3 basicsr/test.py -opt options/test/test_CAPANet_x3.yml
+python3 basicsr/test.py -opt options/test/test_CAPANet_x4.yml
 ```
 
 ## :kissing_heart:Citation
